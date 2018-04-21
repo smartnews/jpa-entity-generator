@@ -1,0 +1,112 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+compileJava {
+    sourceCompatibility = '1.8'
+}
+repositories {
+    mavenCentral()
+}
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+    providedCompile
+}
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+sourceSets.test.runtimeClasspath += configurations.providedCompile
+
+dependencies {
+    compile 'com.google.guava:guava:24.1-jre'
+    compile 'org.apache.commons:commons-lang3:3.7'
+    compile 'org.freemarker:freemarker:2.3.28'
+    compile 'org.yaml:snakeyaml:1.21'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    providedCompile 'org.projectlombok:lombok:1.16.20'
+    providedCompile gradleApi()
+    providedCompile 'org.apache.maven:maven-plugin-api:3.5.3'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.h2database:h2:1.4.197'
+    testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+}
+
+sourceSets {
+    main {
+        java {
+            exclude 'com/smartnews/jpa_entity_generator/maven/**'
+        }
+    }
+}
+
+test {
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        testLogging.showStandardStreams = true
+    }
+}
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.groupId = 'com.smartnews'
+            pom.artifactId = 'jpa-entity-generator'
+            pom.version = '0.99.0'
+
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: "$System.env.SONATYPE_NEXUS_USER", password: "$System.env.SONATYPE_NEXUS_PASS")
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: "$System.env.SONATYPE_NEXUS_USER", password: "$System.env.SONATYPE_NEXUS_PASS")
+            }
+
+            pom.project {
+                name 'JPA Entity Generator'
+                packaging 'jar'
+                url 'https://github.com/smartnews/jpa-entity-generator'
+
+                scm {
+                    connection 'git@github.com:smartnews/jpa-entity-generator.git'
+                    developerConnection 'git@github.com:smartnews/jpa-entity-generator.git'
+                    url 'https://github.com/smartnews/jpa-entity-generator'
+                }
+
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'seratch'
+                        name 'Kazuhiro Sera'
+                        email 'seratch@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
