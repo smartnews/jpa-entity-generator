@@ -60,10 +60,22 @@ allprojects {
 apply plugin: 'maven'
 apply plugin: 'signing'
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+artifacts {
+    archives javadocJar, sourcesJar
+}
 signing {
     sign configurations.archives
 }
 
+try {
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -74,15 +86,16 @@ uploadArchives {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
             repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: "$System.env.SONATYPE_NEXUS_USER", password: "$System.env.SONATYPE_NEXUS_PASS")
+                authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: "$System.env.SONATYPE_NEXUS_USER", password: "$System.env.SONATYPE_NEXUS_PASS")
+                authentication(userName: ossrhUsername, password: ossrhPassword)
             }
 
             pom.project {
                 name 'JPA Entity Generator'
+                description 'Lombok-wired JPA entity source code generator, Gradle and Maven supported.'
                 packaging 'jar'
                 url 'https://github.com/smartnews/jpa-entity-generator'
 
@@ -110,3 +123,4 @@ uploadArchives {
         }
     }
 }
+} catch (MissingPropertyException e) { e.printStackTrace() }
