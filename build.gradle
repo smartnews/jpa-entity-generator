@@ -81,7 +81,7 @@ uploadArchives {
         mavenDeployer {
             pom.groupId = 'com.smartnews'
             pom.artifactId = 'jpa-entity-generator'
-            pom.version = '0.99.1-SNAPSHOT'
+            pom.version = '0.99.1'
 
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
