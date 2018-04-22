@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.h2database:h2:1.4.197'
+
         // classpath 'com.smartnews:jpa-entity-generator:0.99.0'
         classpath files('../build/libs/jpa-entity-generator.jar')
         classpath 'com.google.guava:guava:24.1-jre'
@@ -28,10 +29,14 @@ repositories {
 dependencies {
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     providedCompile 'org.projectlombok:lombok:1.16.20'
+
     testCompile 'com.h2database:h2:1.4.197'
     testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
     testCompile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.1.RELEASE'
     testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE'
+
+    // https://github.com/spring-projects/spring-boot/issues/11042
+    testCompile 'javax.xml.bind:jaxb-api:2.3.0'
 }
 
 //apply plugin: 'entitygen'
