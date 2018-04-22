@@ -1,6 +1,7 @@
 ## jpa-entity-generator
 
 [![Build Status](https://travis-ci.org/smartnews/jpa-entity-generator.svg?branch=master)](https://travis-ci.org/smartnews/jpa-entity-generator)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.smartnews/jpa-entity-generator/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.smartnews/jpa-entity-generator)
 
 This is a Java library which generates Lombok-wired JPA entity source code. The project provides Gradle plugin and Maven plugin.
 
