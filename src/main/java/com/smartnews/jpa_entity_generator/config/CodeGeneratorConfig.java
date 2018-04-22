@@ -16,22 +16,33 @@ import java.util.List;
 @Data
 public class CodeGeneratorConfig implements Serializable {
 
-    // NOTE: @Table(name = "${tableName}") needs tableName of target table.
-    private static List<ClassAnnotationRule> PRESET_CLASS_ANNOTATIONS = Arrays.asList(
-            ClassAnnotationRule.createGlobal(Annotation.fromClassName("lombok.Data")),
-            // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder
-            // see also: https://github.com/rzwitserloot/lombok/issues/816
+    // ----------
+    // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder
+    // see also: https://github.com/rzwitserloot/lombok/issues/816
+    public static final List<ClassAnnotationRule> CLASS_ANNOTATIONS_NECESSARY_FOR_LOMBOK_BUILDER = Arrays.asList(
             ClassAnnotationRule.createGlobal(Annotation.fromClassName("lombok.NoArgsConstructor")),
             ClassAnnotationRule.createGlobal(Annotation.fromClassName("lombok.AllArgsConstructor"))
+    );
+
+    public static final List<ImportRule> IMPORTS_NECESSARY_FOR_LOMBOK_BUILDER = Arrays.asList(
+            ImportRule.createGlobal("lombok.NoArgsConstructor"),
+            ImportRule.createGlobal("lombok.AllArgsConstructor")
+    );
+
+    // ----------
+    // Preset
+
+    // NOTE: @Table(name = "${tableName}") needs tableName of target table.
+    private static List<ClassAnnotationRule> PRESET_CLASS_ANNOTATIONS = Arrays.asList(
+            ClassAnnotationRule.createGlobal(Annotation.fromClassName("lombok.Data"))
     );
 
     private static final List<ImportRule> PRESET_IMPORTS = Arrays.asList(
             ImportRule.createGlobal("java.sql.*"),
             ImportRule.createGlobal("javax.persistence.*"),
-            ImportRule.createGlobal("lombok.Data"),
-            ImportRule.createGlobal("lombok.NoArgsConstructor"),
-            ImportRule.createGlobal("lombok.AllArgsConstructor")
+            ImportRule.createGlobal("lombok.Data")
     );
+    // ----------
 
     public CodeGeneratorConfig() {
     }
@@ -39,6 +50,10 @@ public class CodeGeneratorConfig implements Serializable {
     public void setUpPresetRules() {
         getClassAnnotationRules().addAll(0, PRESET_CLASS_ANNOTATIONS);
         getImportRules().addAll(0, PRESET_IMPORTS);
+        if (autoPreparationForLombokBuilderEnabled) {
+            getClassAnnotationRules().addAll(CLASS_ANNOTATIONS_NECESSARY_FOR_LOMBOK_BUILDER);
+            getImportRules().addAll(IMPORTS_NECESSARY_FOR_LOMBOK_BUILDER);
+        }
     }
 
     private JDBCSettings jdbcSettings;
@@ -50,6 +65,10 @@ public class CodeGeneratorConfig implements Serializable {
     private String packageName = "com.smartnews.db";
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";
     private boolean jpa1SupportRequired;
+
+    // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder
+    // see also: https://github.com/rzwitserloot/lombok/issues/816
+    private boolean autoPreparationForLombokBuilderEnabled;
 
     private List<ImportRule> importRules = new ArrayList<>();
 

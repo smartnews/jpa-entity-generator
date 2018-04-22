@@ -5,9 +5,7 @@ import com.example.util.ExpirationPredicate;
 import java.io.Serializable;
 import java.sql.*;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -15,8 +13,6 @@ import lombok.ToString;
  * TODO: This A/B testing mechanism is no longer used
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Deprecated
 @Entity(name = "com.example.entity.jpa1.ABTest")

@@ -89,6 +89,10 @@ classAnnotationRules:
         attributes:
           - name: "toBuilder"
             value: "true"
+  - className: "Blog"
+    annotations:
+      - className: "lombok.NoArgsConstructor"
+      - className: "lombok.AllArgsConstructor"
 
 # ---------------------------------------------------------
 # *** Rules on how to append class comments ***
