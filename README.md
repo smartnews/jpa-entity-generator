@@ -92,13 +92,9 @@ package com.example.entity;
 
 import java.sql.*;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity(name = "com.example.entity.Blog")
 @Table(name = "blog")
 public class Blog {
