@@ -60,7 +60,7 @@ Maven plugin to run the code generator is also available.
 Put `src/main/resources/entityGenConfig.yml`, and then run the following command:
 
 ```
-mvn entitygen:generateAll
+mvn jpa-entity-generator:generateAll
 ```
 
 #### src/main/resources/entityGenConfig.yml
