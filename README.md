@@ -100,7 +100,7 @@ import lombok.Data;
 public class Blog {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "\"id\"")
   private Integer id;
   @Column(name = "\"name\"")
