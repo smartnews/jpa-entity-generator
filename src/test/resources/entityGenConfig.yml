@@ -161,7 +161,7 @@ fieldAdditionalCommentRules:
 #     - defaultValue (string): the default value part in source code (specify '"something"' if you have a string value)
 fieldDefaultValueRules:
   # If you don't specify classNames in a rule, all the generated classes will be affected.
-  - {                        fieldNames: ["name"],   defaultValue: '"Anonymous"'}
+#  - {                        fieldNames: ["name"],   defaultValue: '"Anonymous"'}
   - {classNames: ["ABTest"], fieldNames: ["active"], defaultValue: "0"}
 
 # ---------------------------------------------------------

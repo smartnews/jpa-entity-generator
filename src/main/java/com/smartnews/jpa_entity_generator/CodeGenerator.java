@@ -10,6 +10,7 @@ import com.smartnews.jpa_entity_generator.util.TypeConverter;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -123,6 +124,9 @@ public class CodeGenerator {
                                 .filter(r -> r.matches(className, fieldName)).findFirst();
                 if (fieldDefaultValueRule.isPresent()) {
                     f.setDefaultValue(fieldDefaultValueRule.get().getDefaultValue());
+                }
+                if (StringUtils.isNotEmpty(config.getGeneratedValueStrategy())) {
+                    f.setGeneratedValueStrategy(config.getGeneratedValueStrategy());
                 }
 
                 f.setAutoIncrement(c.isAutoIncrement());

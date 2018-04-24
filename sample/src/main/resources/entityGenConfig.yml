@@ -25,6 +25,8 @@ jpa1SupportRequired: true
 #   - string value: full package name separate from the "packageName"
 packageNameForJpa1: "com.example.entity.jpa1"
 
+generatedValueStrategy: null
+
 # ---------------------------------------------------------
 # *** Rules for exclusion ***
 

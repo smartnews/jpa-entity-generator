@@ -16,7 +16,7 @@ import lombok.ToString;
 public class Tag implements Serializable {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`id`")
   private Integer id;
   @Column(name = "`tag`")
