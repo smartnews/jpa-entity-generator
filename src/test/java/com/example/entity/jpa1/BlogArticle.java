@@ -18,7 +18,7 @@ public class BlogArticle implements Serializable {
   public Integer getId() { return this.id; }
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`id`")
   private Integer id;
   /**
@@ -27,7 +27,7 @@ public class BlogArticle implements Serializable {
   @Column(name = "`blog_id`")
   private Integer blogId;
   @Column(name = "`name`")
-  private String name = "Anonymous";
+  private String name;
   @Deprecated
   @Column(name = "`tags`")
   private Clob tags;

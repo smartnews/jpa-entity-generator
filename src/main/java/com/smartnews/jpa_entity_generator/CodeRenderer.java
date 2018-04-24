@@ -77,6 +77,7 @@ public class CodeRenderer {
             private String defaultValue;
             private boolean primaryKey;
             private boolean autoIncrement;
+            private String generatedValueStrategy;
             private List<Annotation> annotations = new ArrayList<>();
         }
     }

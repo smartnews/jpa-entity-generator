@@ -61,6 +61,11 @@ public class CodeGeneratorConfig implements Serializable {
     private List<String> tableNames = new ArrayList<>();
     private List<TableExclusionRule> tableExclusionRules = new ArrayList<>();
 
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Possible values: TABLE, SEQUENCE, IDENTITY, AUTO
+    // If you don't need to specify the `strategy`, set null value.
+    private String generatedValueStrategy = "IDENTITY";
+
     private String outputDirectory = "src/main/java";
     private String packageName = "com.smartnews.db";
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";

@@ -18,11 +18,11 @@ import lombok.ToString;
 public class Blog implements Serializable {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`id`")
   private Integer id;
   @Column(name = "`name`")
-  private String name = "Anonymous";
+  private String name;
   @Column(name = "`active`")
   private boolean active;
   @Column(name = "`created_at`")

@@ -37,7 +37,11 @@ ${field.comment}
   @Id
 </#if>
 <#if field.autoIncrement>
+  <#if field.generatedValueStrategy?has_content>
+  @GeneratedValue(strategy = GenerationType.${field.generatedValueStrategy})
+  <#else>
   @GeneratedValue
+  </#if>
 </#if>
 <#list field.annotations as annotation>
   ${annotation.toString()}

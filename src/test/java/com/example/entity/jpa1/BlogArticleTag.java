@@ -18,7 +18,7 @@ public class BlogArticleTag implements Serializable {
   public Integer getId() { return this.id; }
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`id`")
   private Integer id;
   /**

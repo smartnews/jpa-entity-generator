@@ -4,5 +4,5 @@
 cd sample && \
 ./gradlew entityGen && \
 cp -pr db testdb && \
-#git diff --exit-code && \
+git diff --exit-code && \
 ./gradlew test
