@@ -1,0 +1,40 @@
+apply plugin: 'java'
+
+buildscript {
+  repositories {
+    mavenCentral()
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/releases'
+    }
+  }
+  dependencies {
+    classpath 'mysql:mysql-connector-java:5.1.46'
+    classpath 'com.smartnews:jpa-entity-generator:0.99.2'
+  }
+}
+
+configurations { providedCompile }
+sourceSets.main.compileClasspath += configurations.providedCompile
+sourceSets.test.compileClasspath += configurations.providedCompile
+sourceSets.test.runtimeClasspath += configurations.providedCompile
+
+repositories {
+  mavenCentral()
+}
+dependencies {
+  compile 'mysql:mysql-connector-java:5.1.46'
+  compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+  providedCompile 'org.projectlombok:lombok:1.16.20'
+
+  testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
+  testCompile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.1.RELEASE'
+  testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE'
+
+  // https://github.com/spring-projects/spring-boot/issues/11042
+  testCompile 'javax.xml.bind:jaxb-api:2.3.0'
+}
+
+apply plugin: 'entitygen'
+entityGen {
+    configPath = 'src/main/resources/entityGenConfig.yml'
+}

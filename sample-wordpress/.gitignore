@@ -1,0 +1,17 @@
+.gradle/
+.idea/
+build/
+lib/
+
+*.db
+
+.DS_Store
+*.iml
+*.ipr
+*.iws
+local.properties
+gradle.properties
+classes
+out
+output/
+target/

@@ -1,0 +1,58 @@
+jdbcSettings:
+  url: "jdbc:mysql://127.0.0.1:3306/wordpress?useSSL=false&useInformationSchema=true"
+  username: "wordpress"
+  password: "wordpress"
+  driverClassName: "com.mysql.jdbc.Driver"
+
+packageName: "com.example.entity"
+
+# ---------------------------------------------------------
+# *** Rules for table/class name conversion ***
+
+# If you need some rules that convert table names to entity class names, list the mapping rules as below.
+#   - array of ClassNameRule objects
+#     - tableName: table name (full name, case sensitive)
+#     - className: Java class name to be used (you cannot include package namme in front of the class name)
+classNameRules:
+  - tableName: "wp_commentmeta"
+    className: "CommentMeta"
+  - tableName: "wp_comments"
+    className: "Comment"
+  - tableName: "wp_ec3_schedule"
+    className: "Ec3Schedule"
+  - tableName: "wp_links"
+    className: "Link"
+  - tableName: "wp_options"
+    className: "Option"
+  - tableName: "wp_postmeta"
+    className: "PostMeta"
+  - tableName: "wp_posts"
+    className: "Post"
+  - tableName: "wp_terms"
+    className: "Term"
+  - tableName: "wp_term_relationships"
+    className: "TermRelationship"
+  - tableName: "wp_term_taxonomy"
+    className: "TermTaxonomy"
+  - tableName: "wp_usermeta"
+    className: "UserMeta"
+  - tableName: "wp_users"
+    className: "User"
+
+# ---------------------------------------------------------
+# *** Rules to append additional code to generated classes ***
+#   - array of AdditionalCodeRule objects
+#     - (optional) className (string) / classNames (array): target Java class names (case sensitive)
+#     - code (string): writing code in a string value
+#     - (optional) position (string): "Top" or "Bottom" (default: "Bottom")
+#     - (optional) jpa1Code (string): writing code in a string value if you need to overwrite code only for JPA 1 compatible entities
+additionalCodeRules:
+  - className: "Post"
+    code: |
+            @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = CascadeType.ALL)
+            private java.util.List<PostMeta> postMetaList;
+  - className: "PostMeta"
+    code: |
+            @ManyToOne
+            @JoinColumn(name = "\"post_id\"", insertable = false, updatable = false)
+            private Post post;
