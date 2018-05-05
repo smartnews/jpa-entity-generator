@@ -1,6 +1,9 @@
 # ---------------------------------------------------------
 # *** JDBC configuration to fetch metadata ***
 
+# You can embed env variables for this section.
+# e.g. password: ${DB_PASSWORD} # export DB_PASSWORD=pass
+
 jdbcSettings:
   url: "jdbc:h2:file:./db/blog;MODE=MySQL;TRACE_LEVEL_FILE=2;TRACE_LEVEL_SYSTEM_OUT=2"
   username: "user"

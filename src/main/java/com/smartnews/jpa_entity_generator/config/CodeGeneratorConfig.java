@@ -9,6 +9,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Code generator's configuration.
@@ -45,6 +48,51 @@ public class CodeGeneratorConfig implements Serializable {
     // ----------
 
     public CodeGeneratorConfig() {
+    }
+
+    public void loadEnvVariables() {
+        // JDBC settings
+        JDBCSettings settings = getJdbcSettings();
+        if (hasEnvVariables(settings.getUrl())) {
+            settings.setUrl(replaceEnvVariables(settings.getUrl()));
+        }
+        if (hasEnvVariables(settings.getUsername())) {
+            settings.setUsername(replaceEnvVariables(settings.getUsername()));
+        }
+        if (hasEnvVariables(settings.getPassword())) {
+            settings.setPassword(replaceEnvVariables(settings.getPassword()));
+        }
+        if (hasEnvVariables(settings.getDriverClassName())) {
+            settings.setDriverClassName(replaceEnvVariables(settings.getDriverClassName()));
+        }
+    }
+
+    static boolean hasEnvVariables(String value) {
+        return value != null && value.contains("${");
+    }
+
+    private static final Pattern REPLACE_ENV_VARIABLES_PATTERN = Pattern.compile("(\\$\\{[^}]+\\})");
+
+    static String replaceEnvVariables(String value) {
+        Matcher matcher = REPLACE_ENV_VARIABLES_PATTERN.matcher(value);
+        if (matcher.find()) {
+            String replacedValue = value;
+            Map<String, String> envVariables = System.getenv();
+
+            for (int i = 0; i < matcher.groupCount(); i++) {
+                String grouped = matcher.group(i + 1);
+                String envKey = grouped.replaceAll("[\\$\\{\\}]", "");
+                String envValue = envVariables.get(envKey);
+                if (envValue == null) {
+                    throw new IllegalStateException("Env variable: " + envKey + " was not found!");
+                } else {
+                    replacedValue = replacedValue.replace(grouped, envValue);
+                }
+            }
+            return replacedValue;
+        } else {
+            return value;
+        }
     }
 
     public void setUpPresetRules() {
@@ -95,6 +143,7 @@ public class CodeGeneratorConfig implements Serializable {
         try (InputStream is = ResourceReader.getResourceAsStream(path)) {
             try (Reader reader = new InputStreamReader(is)) {
                 CodeGeneratorConfig config = YAML.loadAs(reader, CodeGeneratorConfig.class);
+                config.loadEnvVariables();
                 config.setUpPresetRules();
                 return config;
             }
