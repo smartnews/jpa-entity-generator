@@ -26,12 +26,17 @@ dependencies {
     compile 'org.freemarker:freemarker:2.3.28'
     compile 'org.yaml:snakeyaml:1.21'
     compile 'org.slf4j:slf4j-api:1.7.25'
-    providedCompile 'org.projectlombok:lombok:1.16.20'
+
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+
     providedCompile gradleApi()
     providedCompile 'org.apache.maven:maven-plugin-api:3.5.3'
+
     testCompile 'junit:junit:4.12'
     testCompile 'com.h2database:h2:1.4.197'
     testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+
+    testCompileOnly 'org.projectlombok:lombok:1.16.20'
 }
 
 sourceSets {
