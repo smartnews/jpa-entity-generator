@@ -54,6 +54,11 @@ allprojects {
             options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
         }
     }
+
+    // http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
 
@@ -121,11 +126,3 @@ uploadArchives {
     }
 }
 } catch (MissingPropertyException e) { e.printStackTrace() }
-
-// http://blog.joda.org/2014/02/turning-off-doclint-in-jdk-8-javadoc.html
-allprojects {
-    tasks.withType(Javadoc) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
-}
-
