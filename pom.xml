@@ -4,7 +4,7 @@
     <groupId>com.smartnews</groupId>
     <artifactId>maven-jpa-entity-generator-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.99.3</version>
+    <version>0.99.4</version>
     <name>maven-entitygen-plugin Maven Mojo</name>
     <url>https://github.com/smartnews/jpa-entity-generator</url>
 
@@ -62,7 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.5.2</version>
                 <executions>
                     <execution>
                         <id>mojo-descriptor</id>
@@ -162,13 +162,13 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-plugin-api</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.smartnews</groupId>
             <artifactId>jpa-entity-generator</artifactId>
-            <version>0.99.3</version>
+            <version>0.99.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
