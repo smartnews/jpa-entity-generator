@@ -14,6 +14,8 @@ public class DatabaseUtil {
             conn.prepareStatement("drop table tag if exists").execute();
             conn.prepareStatement("drop table article_tag if exists").execute();
             conn.prepareStatement("drop table abtest if exists").execute();
+            conn.prepareStatement("drop table something_tmp if exists").execute();
+            conn.prepareStatement("drop table something_tmp2 if exists").execute();
             conn.prepareStatement("create table blog (" +
                     "id integer primary key auto_increment not null, " +
                     "name varchar(30), " +
@@ -38,6 +40,16 @@ public class DatabaseUtil {
                     "created_at timestamp not null" +
                     ")").execute();
             conn.prepareStatement("create table abtest (" +
+                    "identifier varchar(50) primary key not null, " +
+                    "expiration_timestamp integer not null, " +
+                    "config text" +
+                    ")").execute();
+            conn.prepareStatement("create table something_tmp (" +
+                    "identifier varchar(50) primary key not null, " +
+                    "expiration_timestamp integer not null, " +
+                    "config text" +
+                    ")").execute();
+            conn.prepareStatement("create table something_tmp2 (" +
                     "identifier varchar(50) primary key not null, " +
                     "expiration_timestamp integer not null, " +
                     "config text" +
