@@ -29,8 +29,30 @@ public interface TableMatcher {
             // global settings
             return true;
         }
-        return (getTableName() != null && getTableName().equals(tableName)) ||
-                (getTableNames() != null && getTableNames().contains(tableName));
+
+        String singleTarget = getTableName();
+        if (singleTarget != null) {
+            boolean matched = singleTarget.equals(tableName) || tableName.matches(singleTarget);
+            if (matched) {
+                return true;
+            }
+        }
+
+        List<String> targets = getTableNames();
+        if (targets != null && targets.isEmpty() == false) {
+            boolean matched = targets.contains(tableName);
+            if (matched) {
+                return true;
+            } else {
+                for (String target : targets) {
+                    if (tableName.matches(target)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 }

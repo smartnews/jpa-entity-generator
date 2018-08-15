@@ -29,8 +29,30 @@ public interface ClassMatcher {
             // global settings
             return true;
         }
-        return (getClassName() != null && getClassName().equals(className)) ||
-                (getClassNames() != null && getClassNames().contains(className));
+
+        String singleTarget = getClassName();
+        if (singleTarget != null) {
+            boolean matched = singleTarget.equals(className) || className.matches(singleTarget);
+            if (matched) {
+                return true;
+            }
+        }
+
+        List<String> targets = getClassNames();
+        if (targets != null && targets.isEmpty() == false) {
+            boolean matched = targets.contains(className);
+            if (matched) {
+                return true;
+            } else {
+                for (String target : targets) {
+                    if (className.matches(target)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
 }

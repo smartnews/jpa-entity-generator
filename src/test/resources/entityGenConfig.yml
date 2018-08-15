@@ -32,7 +32,8 @@ packageNameForJpa1: "com.example.entity.jpa1"
 #   - array of TableExclusionRule objects
 #     - tableName (string) / tableNames (array): string value that partially matches table names (case sensitive)
 tableExclusionRules:
-  - tableNames: ["_tmp"]
+  - tableName: [".*_tmp"]
+  - tableNames: [".*_tmp2"]
 
 # ---------------------------------------------------------
 # *** Rules for table/class name conversion ***
