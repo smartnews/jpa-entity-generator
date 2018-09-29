@@ -36,6 +36,6 @@ public class BlogArticle implements Serializable {
 
   @lombok.Setter(lombok.AccessLevel.NONE)
   @ManyToOne
-  @JoinColumn(name = "`blog_id`", referencedColumnName = "`id`", insertable = false, updatable = false)
+  @JoinColumn(name = "\"blog_id\"", referencedColumnName = "\"id\"", insertable = false, updatable = false)
   private Blog blog;
 }

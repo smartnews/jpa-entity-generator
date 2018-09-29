@@ -3,4 +3,10 @@ language: java
 jdk:
   - oraclejdk8
   - oraclejdk9
+  - oraclejdk10
+  - openjdk8
+  - openjdk9
+  - openjdk10
+  # https://github.com/rzwitserloot/lombok/issues/1877
+  #- openjdk11
 install: ./test.sh

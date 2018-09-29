@@ -9,7 +9,7 @@ buildscript {
   }
   dependencies {
     classpath 'mysql:mysql-connector-java:5.1.46'
-    classpath 'com.smartnews:jpa-entity-generator:0.99.3'
+    classpath 'com.smartnews:jpa-entity-generator:0.99.4'
   }
 }
 
@@ -24,7 +24,7 @@ repositories {
 dependencies {
   compile 'mysql:mysql-connector-java:5.1.46'
   compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
-  providedCompile 'org.projectlombok:lombok:1.16.20'
+  providedCompile 'org.projectlombok:lombok:1.18.2'
 
   testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
   testCompile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.1.RELEASE'
