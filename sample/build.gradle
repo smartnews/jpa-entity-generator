@@ -7,12 +7,12 @@ buildscript {
     dependencies {
         classpath 'com.h2database:h2:1.4.197'
 
-        // classpath 'com.smartnews:jpa-entity-generator:0.99.0'
-        classpath files('../build/libs/jpa-entity-generator.jar')
-        classpath 'com.google.guava:guava:24.1-jre'
-        classpath 'org.apache.commons:commons-lang3:3.7'
+        // classpath 'com.smartnews:jpa-entity-generator:0.99.4'
+        classpath files('../build/libs/jpa-entity-generator.jar') // running `cd ../; ./gradlew jar` is required
+        classpath 'com.google.guava:guava:26.0-jre'
+        classpath 'org.apache.commons:commons-lang3:3.8.1'
         classpath 'org.freemarker:freemarker:2.3.28'
-        classpath 'org.yaml:snakeyaml:1.21'
+        classpath 'org.yaml:snakeyaml:1.23'
         classpath 'org.projectlombok:lombok:1.16.20'
     }
 }
@@ -28,7 +28,7 @@ repositories {
 
 dependencies {
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
-    providedCompile 'org.projectlombok:lombok:1.16.20'
+    providedCompile 'org.projectlombok:lombok:1.18.2'
 
     testCompile 'com.h2database:h2:1.4.197'
     testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
