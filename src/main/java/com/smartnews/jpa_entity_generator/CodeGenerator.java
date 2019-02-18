@@ -53,7 +53,8 @@ public class CodeGenerator {
         Files.createDirectories(dir);
 
         TableMetadataFetcher metadataFetcher = new TableMetadataFetcher();
-        List<String> tableNames = metadataFetcher.getTableNames(originalConfig.getJdbcSettings());
+        List<String> allTableNames = metadataFetcher.getTableNames(originalConfig.getJdbcSettings());
+        List<String> tableNames = filterTableNames(originalConfig, allTableNames);
         for (String tableName : tableNames) {
             boolean shouldExclude = originalConfig.getTableExclusionRules().stream().filter(rule -> rule.matches(tableName)).count() > 0;
             if (shouldExclude) {
@@ -210,6 +211,34 @@ public class CodeGenerator {
             Files.write(path, code.getBytes());
 
             log.debug("path: {}, code: {}", path, code);
+        }
+    }
+
+    private static List<String> filterTableNames(CodeGeneratorConfig config, List<String> allTableNames) {
+        String tableScanMode = config.getTableScanMode();
+        if (tableScanMode == null) {
+            return allTableNames;
+        }
+        String normalizedTableScanMode = tableScanMode.trim().toLowerCase(Locale.ENGLISH);
+        if (normalizedTableScanMode.equals("all")) {
+            return allTableNames;
+        } else if (normalizedTableScanMode.equals("rulebased")) {
+            List<String> filteredTableNames = new ArrayList<>();
+            for (String tableName : allTableNames) {
+                boolean isScanTarget = true;
+                for (TableScanRule rule : config.getTableScanRules()) {
+                    if (rule.matches(tableName) == false) {
+                        isScanTarget = false;
+                        break;
+                    }
+                }
+                if (isScanTarget) {
+                    filteredTableNames.add(tableName);
+                }
+            }
+            return filteredTableNames;
+        } else {
+            throw new IllegalStateException("Invalid value (" + tableScanMode + ") is specified for tableScanName");
         }
     }
 
