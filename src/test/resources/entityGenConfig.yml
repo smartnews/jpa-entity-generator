@@ -26,6 +26,19 @@ jpa1SupportRequired: true
 packageNameForJpa1: "com.example.entity.jpa1"
 
 # ---------------------------------------------------------
+# *** Table scan mode ***
+
+# Set the scan mode (possible values: All / RuleBased)
+#   - string value: 'All' (default) or 'RuleBased'
+tableScanMode: 'All'
+
+# If the "tableScanMode" is "RuleBased", the table scanner considers these rules
+#   - array of TableScanRule objects
+#     - tableName (string) / tableNames (array): string value that partially matches table names (case sensitive)
+#tableScanRules:
+#  - tableNames: ["foo_.*"]
+
+# ---------------------------------------------------------
 # *** Rules for exclusion ***
 
 # Define the following rules if you'd like to exclude specific tables when generating entity classes
@@ -41,7 +54,7 @@ tableExclusionRules:
 # If you need some rules that convert table names to entity class names, list the mapping rules as below.
 #   - array of ClassNameRule objects
 #     - tableName: table name (full name, case sensitive)
-#     - className: Java class name to be used (you cannot include package namme in front of the class name)
+#     - className: Java class name to be used (you cannot include package name in front of the class name)
 classNameRules:
   - tableName: "article"
     className: "BlogArticle"
