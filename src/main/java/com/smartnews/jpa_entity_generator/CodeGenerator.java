@@ -51,14 +51,26 @@ public class CodeGenerator {
         Path dir = Paths.get(originalConfig.getOutputDirectory() + "/" +
                 (isJpa1 ? originalConfig.getPackageNameForJpa1().replaceAll("\\.", "/") : originalConfig.getPackageName().replaceAll("\\.", "/")));
         Files.createDirectories(dir);
+        if (originalConfig.getUseTableExclusionModel() == null) {
+        	originalConfig.setUseTableExclusionModel(true);
+        }
 
         TableMetadataFetcher metadataFetcher = new TableMetadataFetcher();
         List<String> tableNames = metadataFetcher.getTableNames(originalConfig.getJdbcSettings());
         for (String tableName : tableNames) {
-            boolean shouldExclude = originalConfig.getTableExclusionRules().stream().filter(rule -> rule.matches(tableName)).count() > 0;
-            if (shouldExclude) {
-                log.debug("Skipped to generate entity for {}", tableName);
-                continue;
+            if (originalConfig.getUseTableExclusionModel()) {
+                boolean shouldExclude = originalConfig.getTableExclusionRules().stream().filter(rule -> rule.matches(tableName)).count() > 0;
+                if (shouldExclude) {
+                    log.debug("Skipped to generate entity for {}", tableName);
+                    continue;
+                }
+            } else {
+                boolean shouldInclude =
+                        originalConfig.getTableIncludeNamesRules().stream().filter(rule -> rule.matches(tableName)).count() > 0;
+                if (!shouldInclude) {
+                    log.debug("Skipped to generate entity for {}", tableName);
+                    continue;
+                }
             }
             CodeGeneratorConfig config = SerializationUtils.clone(originalConfig);
             Table table = metadataFetcher.getTable(config.getJdbcSettings(), tableName);

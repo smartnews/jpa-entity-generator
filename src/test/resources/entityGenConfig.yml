@@ -36,6 +36,22 @@ tableExclusionRules:
   - tableNames: [".*_tmp2"]
 
 # ---------------------------------------------------------
+# *** model for exclusion or include default use exclusion model ***
+#  useTableExclusionModel: true use tableExclusionRules
+#  useTableExclusionModel: false use tableIncludeNamesRules
+useTableExclusionModel: true
+
+# ---------------------------------------------------------
+# *** Rules for include ***
+
+# Define the following rules if you'd like to include specific tables when generating entity classes
+#   - array of TableIncludeRule objects
+#     - tableName (string) / tableNames (array): string value that partially matches table names (case sensitive)
+tableIncludeNamesRules:
+  - tableName: [".*_tmp"]
+  - tableNames: [".*_tmp2"]
+
+# ---------------------------------------------------------
 # *** Rules for table/class name conversion ***
 
 # If you need some rules that convert table names to entity class names, list the mapping rules as below.
