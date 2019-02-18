@@ -4,7 +4,7 @@
 jdbcSettings:
   url: "jdbc:h2:file:./sample/db/blog;MODE=MySQL;TRACE_LEVEL_FILE=2;TRACE_LEVEL_SYSTEM_OUT=2"
   username: "user"
-  password: ${DB_PASSWORD}
+  password: pass
   driverClassName: "org.h2.Driver"
 
 # ---------------------------------------------------------
@@ -34,6 +34,22 @@ packageNameForJpa1: "com.example.entity.jpa1"
 tableExclusionRules:
   - tableName: [".*_tmp"]
   - tableNames: [".*_tmp2"]
+
+# ---------------------------------------------------------
+# *** model for exclusion or include default use exclusion model ***
+#  useTableExclusionModel: true use tableExclusionRules
+#  useTableExclusionModel: false use tableIncludeNamesRules
+useTableExclusionModel: false
+
+# ---------------------------------------------------------
+# *** Rules for include ***
+
+# Define the following rules if you'd like to include specific tables when generating entity classes
+#   - array of TableIncludeRule objects
+#     - tableName (string) / tableNames (array): string value that partially matches table names (case sensitive)
+tableIncludeNamesRules:
+  - tableName: ["abtest"]
+  - tableNames: ["abtest"]
 
 # ---------------------------------------------------------
 # *** Rules for table/class name conversion ***

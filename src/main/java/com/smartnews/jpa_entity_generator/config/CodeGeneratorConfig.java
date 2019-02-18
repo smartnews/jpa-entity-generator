@@ -107,7 +107,9 @@ public class CodeGeneratorConfig implements Serializable {
     private JDBCSettings jdbcSettings;
 
     private List<String> tableNames = new ArrayList<>();
+    private Boolean useTableExclusionModel;
     private List<TableExclusionRule> tableExclusionRules = new ArrayList<>();
+    private List<TableIncludeRule> tableIncludeNamesRules = new ArrayList<>();
 
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     // Possible values: TABLE, SEQUENCE, IDENTITY, AUTO
