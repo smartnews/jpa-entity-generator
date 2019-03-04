@@ -112,6 +112,20 @@ public class Blog {
 }
 ```
 
+### How to test on your local machine
+
+To run the unit tests, simply run the following script as the TravisCI build does.
+
+```sh
+./test.sh
+```
+
+If you need to make sure if your latest code works with sample project or your existing projects, run the following command to publish the latest build to the local Maven repository.
+
+```sh
+./gradlew uploadArchives -Plocal
+```
+
 ### How to release new version
 
 ```bash

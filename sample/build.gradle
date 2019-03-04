@@ -2,12 +2,14 @@ apply plugin: 'java'
 
 buildscript {
     repositories {
+        mavenLocal()
         mavenCentral()
     }
     dependencies {
         classpath 'com.h2database:h2:1.4.197'
 
-        // classpath 'com.smartnews:jpa-entity-generator:0.99.4'
+        // NOTE: when you need to go with a specific version in your local repo, use the following line instead
+        // classpath 'com.smartnews:jpa-entity-generator:0.99.6-SNAPSHOT'
         classpath files('../build/libs/jpa-entity-generator.jar') // running `cd ../; ./gradlew jar` is required
         classpath 'com.google.guava:guava:26.0-jre'
         classpath 'org.apache.commons:commons-lang3:3.8.1'
