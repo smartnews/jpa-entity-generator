@@ -35,8 +35,7 @@ public class CodeGenerator {
     private static final Predicate<CodeRenderer.RenderingData.Field> hasIdAnnotation = (f) -> {
         boolean isPrimaryKey = f.isPrimaryKey();
         boolean hasIdAnnotation = f.getAnnotations().stream()
-                .filter(a -> EXPECTED_ID_ANNOTATION_CLASS_NAMES.contains(a.getClassName()))
-                .count() != 0;
+                .anyMatch(a -> EXPECTED_ID_ANNOTATION_CLASS_NAMES.contains(a.getClassName()));
         return isPrimaryKey || hasIdAnnotation;
     };
 
@@ -56,7 +55,7 @@ public class CodeGenerator {
         List<String> allTableNames = metadataFetcher.getTableNames(originalConfig.getJdbcSettings());
         List<String> tableNames = filterTableNames(originalConfig, allTableNames);
         for (String tableName : tableNames) {
-            boolean shouldExclude = originalConfig.getTableExclusionRules().stream().filter(rule -> rule.matches(tableName)).count() > 0;
+            boolean shouldExclude = originalConfig.getTableExclusionRules().stream().anyMatch(rule -> rule.matches(tableName));
             if (shouldExclude) {
                 log.debug("Skipped to generate entity for {}", tableName);
                 continue;
@@ -66,6 +65,7 @@ public class CodeGenerator {
 
             CodeRenderer.RenderingData data = new CodeRenderer.RenderingData();
             data.setJpa1Compatible(isJpa1);
+            data.setEnableJSR305(config.isEnableJSR305NullCheck());
 
             if (isJpa1) {
                 data.setPackageName(config.getPackageNameForJpa1());
@@ -99,16 +99,14 @@ public class CodeGenerator {
                 String fieldName = NameConverter.toFieldName(c.getName());
                 f.setName(fieldName);
                 f.setColumnName(c.getName());
+                f.setNullable(c.isNullable());
 
                 f.setComment(buildFieldComment(className, f.getName(), c, config.getFieldAdditionalCommentRules()));
 
                 f.setAnnotations(config.getFieldAnnotationRules().stream()
                         .filter(rule -> rule.matches(className, f.getName()))
                         .flatMap(rule -> rule.getAnnotations().stream())
-                        .map(a -> {
-                            a.setClassName(collectAndConvertFQDN(a.getClassName(), data.getImportRules()));
-                            return a;
-                        })
+                        .peek(a -> a.setClassName(collectAndConvertFQDN(a.getClassName(), data.getImportRules())))
                         .collect(toList()));
 
                 Optional<FieldTypeRule> fieldTypeRule =
@@ -136,23 +134,22 @@ public class CodeGenerator {
 
             }).collect(toList());
 
-            if (fields.stream().filter(hasIdAnnotation).count() == 0) {
+            if (fields.stream().noneMatch(hasIdAnnotation)) {
                 throw new IllegalStateException("Entity class " + data.getClassName() + " has no @Id field!");
             }
 
             data.setFields(fields);
-            data.setPrimaryKeyFields(fields.stream().filter(f -> f.isPrimaryKey()).collect(toList()));
+            data.setPrimaryKeyFields(fields.stream().filter(CodeRenderer.RenderingData.Field::isPrimaryKey).collect(toList()));
 
             data.setInterfaceNames(orEmptyListIfNull(config.getInterfaceRules()).stream()
                     .filter(r -> r.matches(className))
-                    .map(rule -> {
+                    .peek(rule -> {
                         for (Interface i : rule.getInterfaces()) {
                             i.setName(collectAndConvertFQDN(i.getName(), data.getImportRules()));
                             i.setGenericsClassNames(i.getGenericsClassNames().stream()
                                     .map(cn -> collectAndConvertFQDN(cn, data.getImportRules()))
                                     .collect(toList()));
                         }
-                        return rule;
                     })
                     .flatMap(r -> r.getInterfaces().stream().map(i -> {
                         String genericsPart = i.getGenericsClassNames().size() > 0 ?
@@ -166,12 +163,9 @@ public class CodeGenerator {
 
             data.setClassAnnotationRules(orEmptyListIfNull(config.getClassAnnotationRules()).stream()
                     .filter(r -> r.matches(className))
-                    .map(rule -> {
-                        rule.getAnnotations().forEach(a -> {
-                            a.setClassName(collectAndConvertFQDN(a.getClassName(), data.getImportRules()));
-                        });
-                        return rule;
-                    })
+                    .peek(rule -> rule.getAnnotations().forEach(a -> {
+                        a.setClassName(collectAndConvertFQDN(a.getClassName(), data.getImportRules()));
+                    }))
                     .collect(toList()));
 
             orEmptyListIfNull(config.getAdditionalCodeRules()).forEach(rule -> {
@@ -198,14 +192,13 @@ public class CodeGenerator {
                 }
             });
 
-            orEmptyListIfNull(data.getImportRules())
-                    .sort((r1, r2) -> r1.getImportValue().compareTo(r2.getImportValue()));
+            orEmptyListIfNull(data.getImportRules()).sort(Comparator.comparing(ImportRule::getImportValue));
 
             String code = CodeRenderer.render("entityGen/entity.ftl", data);
 
             String filepath = config.getOutputDirectory() + "/" + data.getPackageName().replaceAll("\\.", "/") + "/" + className + ".java";
             Path path = Paths.get(filepath);
-            if (Files.exists(path) == false) {
+            if (!Files.exists(path)) {
                 Files.createFile(path);
             }
             Files.write(path, code.getBytes());
@@ -227,7 +220,7 @@ public class CodeGenerator {
             for (String tableName : allTableNames) {
                 boolean isScanTarget = true;
                 for (TableScanRule rule : config.getTableScanRules()) {
-                    if (rule.matches(tableName) == false) {
+                    if (!rule.matches(tableName)) {
                         isScanTarget = false;
                         break;
                     }
@@ -244,12 +237,12 @@ public class CodeGenerator {
 
     private static String buildClassComment(String className, Table table, List<ClassAdditionalCommentRule> rules) {
         List<String> comment = table.getDescription()
-                .map(c -> Arrays.asList(c.split("\n")).stream().filter(l -> l != null && l.isEmpty() == false).collect(toList()))
+                .map(c -> Arrays.stream(c.split("\n")).filter(l -> l != null && !l.isEmpty()).collect(toList()))
                 .orElse(Collections.emptyList());
         List<String> additionalComments = rules.stream()
                 .filter(r -> r.matches(className))
-                .map(rule -> rule.getComment())
-                .flatMap(c -> Arrays.asList(c.split("\n")).stream())
+                .map(ClassAdditionalCommentRule::getComment)
+                .flatMap(c -> Arrays.stream(c.split("\n")))
                 .collect(toList());
         comment.addAll(additionalComments);
         if (comment.size() > 0) {
@@ -261,12 +254,12 @@ public class CodeGenerator {
 
     private static String buildFieldComment(String className, String fieldName, Column column, List<FieldAdditionalCommentRule> rules) {
         List<String> comment = column.getDescription()
-                .map(c -> Arrays.asList(c.split("\n")).stream().filter(l -> l != null && l.isEmpty() == false).collect(toList()))
+                .map(c -> Arrays.stream(c.split("\n")).filter(l -> l != null && !l.isEmpty()).collect(toList()))
                 .orElse(Collections.emptyList());
         List<String> additionalComments = rules.stream()
                 .filter(r -> r.matches(className, fieldName))
-                .map(rule -> rule.getComment())
-                .flatMap(c -> Arrays.asList(c.split("\n")).stream())
+                .map(FieldAdditionalCommentRule::getComment)
+                .flatMap(c -> Arrays.stream(c.split("\n")))
                 .collect(toList());
         comment.addAll(additionalComments);
         if (comment.size() > 0) {
@@ -281,8 +274,8 @@ public class CodeGenerator {
     }
 
     private static String collectAndConvertFQDN(String fqdn, List<ImportRule> imports) {
-        if (fqdn != null && fqdn.contains(".") && fqdn.matches("^[a-zA-Z0-9\\.]+$")) {
-            if (imports.stream().filter(i -> i.importValueContains(fqdn)).count() == 0) {
+        if (fqdn != null && fqdn.contains(".") && fqdn.matches("^[a-zA-Z0-9.]+$")) {
+            if (imports.stream().noneMatch(i -> i.importValueContains(fqdn))) {
                 ImportRule rule = new ImportRule();
                 rule.setImportValue(fqdn);
                 imports.add(rule);

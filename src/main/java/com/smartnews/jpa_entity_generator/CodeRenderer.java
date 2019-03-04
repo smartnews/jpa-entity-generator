@@ -58,6 +58,7 @@ public class CodeRenderer {
         private String classComment;
 
         private boolean jpa1Compatible = false;
+        private boolean enableJSR305 = false;
 
         private List<String> topAdditionalCodeList = new ArrayList<>();
         private List<String> bottomAdditionalCodeList = new ArrayList<>();
@@ -72,6 +73,7 @@ public class CodeRenderer {
         public static class Field {
             private String name;
             private String columnName;
+            private boolean nullable;
             private String type;
             private String comment;
             private String defaultValue;
