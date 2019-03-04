@@ -21,17 +21,11 @@ public class CodeGeneratorTest {
 
     @Test
     public void _01_generateAll_TableScanMode_Is_Default() throws Exception {
-        try {
-            CodeGeneratorConfig config = CodeGeneratorConfig.load("entityGenConfig.yml");
-            config.setJpa1SupportRequired(true);
-            config.setOutputDirectory("src/test/java");
-            CodeGenerator.generateAll(config, true);
-            CodeGenerator.generateAll(config, false);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        CodeGeneratorConfig config = CodeGeneratorConfig.load("entityGenConfig.yml");
+        config.setJpa1SupportRequired(true);
+        config.setOutputDirectory("src/test/java");
+        CodeGenerator.generateAll(config, true);
+        CodeGenerator.generateAll(config, false);
     }
 
     @Test
