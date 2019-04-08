@@ -65,7 +65,7 @@ public class CodeGenerator {
 
             CodeRenderer.RenderingData data = new CodeRenderer.RenderingData();
             data.setJpa1Compatible(isJpa1);
-            data.setEnableJSR305(config.isEnableJSR305NullCheck());
+            data.setRequireJSR305(config.isJsr305AnnotationsRequired());
 
             if (isJpa1) {
                 data.setPackageName(config.getPackageNameForJpa1());
@@ -114,8 +114,13 @@ public class CodeGenerator {
                                 .filter(b -> b.matches(className, fieldName)).findFirst();
                 if (fieldTypeRule.isPresent()) {
                     f.setType(fieldTypeRule.get().getTypeName());
+                    f.setPrimitive(isPrimitive(f.getType()));
                 } else {
                     f.setType(TypeConverter.toJavaType(c.getTypeCode()));
+                    if (config.isUsePrimitiveForNonNullField()) {
+                        f.setType(TypeConverter.toPrimitiveTypeIfPossible(f.getType()));
+                    }
+                    f.setPrimitive(isPrimitive(f.getType()));
                 }
 
                 Optional<FieldDefaultValueRule> fieldDefaultValueRule =
@@ -287,4 +292,13 @@ public class CodeGenerator {
         }
     }
 
+    private static boolean isPrimitive(String type) {
+        if (type == null) {
+            return false;
+        }
+        if (type.contains(".")) {
+            return false;
+        }
+        return Character.isLowerCase(type.charAt(0));
+    }
 }

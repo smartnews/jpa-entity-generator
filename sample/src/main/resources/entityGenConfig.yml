@@ -28,6 +28,15 @@ jpa1SupportRequired: true
 #   - string value: full package name separate from the "packageName"
 packageNameForJpa1: "com.example.entity.jpa1"
 
+# If you'd like to have JSR-305 annotations in entity classes as well, set the following attribute
+#   - boolean value: true if you need to generate Nonnull/Nullable annotation-wired entities as well
+jsr305AnnotationsRequired: true
+
+# If you want use primitive type instead of the boxing type(e.g: int <-> Integer), set the following attribute
+# This will only take effect on non null fields
+#   - boolean value: true if you want to use primitive type for non null fields
+usePrimitiveForNonNullField: true
+
 generatedValueStrategy: null
 
 # ---------------------------------------------------------
@@ -134,6 +143,7 @@ classAdditionalCommentRules:
 #     - typeName (string): the type name to be converted
 fieldTypeRules:
   - {classNames: ["ABTest"], fieldName: "config", typeName: "String"}
+  - {classNames: ["ABTest"], fieldName: "expirationTimestamp", typeName: "Integer"}
 
   # If you don't specify classNames in a rule, all the generated classes will be affected.
   - {                        fieldName: "active", typeName: "boolean"}

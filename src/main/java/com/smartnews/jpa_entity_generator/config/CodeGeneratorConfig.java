@@ -107,7 +107,7 @@ public class CodeGeneratorConfig implements Serializable {
             getClassAnnotationRules().addAll(CLASS_ANNOTATIONS_NECESSARY_FOR_LOMBOK_BUILDER);
             getImportRules().addAll(IMPORTS_NECESSARY_FOR_LOMBOK_BUILDER);
         }
-        if (enableJSR305NullCheck) {
+        if (jsr305AnnotationsRequired) {
             getImportRules().addAll(JSR_305_PRESET_IMPORTS);
         }
     }
@@ -129,7 +129,8 @@ public class CodeGeneratorConfig implements Serializable {
     private String packageName = "com.smartnews.db";
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";
     private boolean jpa1SupportRequired;
-    private boolean enableJSR305NullCheck;
+    private boolean jsr305AnnotationsRequired;
+    private boolean usePrimitiveForNonNullField;
 
     // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder
     // see also: https://github.com/rzwitserloot/lombok/issues/816

@@ -81,4 +81,24 @@ public class TypeConverter {
         }
     }
 
+    public static String toPrimitiveTypeIfPossible(String type) {
+        switch (type) {
+            case "Byte":
+                return "byte";
+            case "Short":
+                return "short";
+            case "Integer":
+                return "int";
+            case "Long":
+                return "long";
+            case "Double":
+                return "double";
+            case "Float":
+                return "float";
+            case "Boolean":
+                return "boolean";
+            default:
+                return type;
+        }
+    }
 }

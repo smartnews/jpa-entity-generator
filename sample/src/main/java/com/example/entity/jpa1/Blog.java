@@ -2,6 +2,8 @@ package com.example.entity.jpa1;
 
 import java.io.Serializable;
 import java.sql.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +25,14 @@ public class Blog implements Serializable {
 
   @Id
   @GeneratedValue
-  @Column(name = "`id`")
-  private Integer id;
-  @Column(name = "`name`")
+  @Column(name = "`id`", nullable = false)
+  private int id;
+  @Nullable
+  @Column(name = "`name`", nullable = true)
   private String name;
-  @Column(name = "`active`")
+  @Column(name = "`active`", nullable = true)
   private boolean active;
-  @Column(name = "`created_at`")
+  @Nonnull
+  @Column(name = "`created_at`", nullable = false)
   private Timestamp createdAt;
 }

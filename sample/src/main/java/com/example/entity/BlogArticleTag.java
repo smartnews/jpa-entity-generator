@@ -2,6 +2,8 @@ package com.example.entity;
 
 import java.io.Serializable;
 import java.sql.*;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -19,20 +21,21 @@ public class BlogArticleTag implements Serializable {
 
   @Id
   @GeneratedValue
-  @Column(name = "\"id\"")
-  private Integer id;
+  @Column(name = "\"id\"", nullable = false)
+  private int id;
   /**
    * database comment for article_id
    * The field is non-null value
    */
-  @Column(name = "\"article_id\"")
-  private Integer articleId;
+  @Column(name = "\"article_id\"", nullable = false)
+  private int articleId;
   /**
    * database comment for blog_id
    * The field is non-null value
    */
-  @Column(name = "\"tag_id\"")
-  private Integer tagId;
-  @Column(name = "\"created_at\"")
+  @Column(name = "\"tag_id\"", nullable = false)
+  private int tagId;
+  @Nonnull
+  @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
 }
