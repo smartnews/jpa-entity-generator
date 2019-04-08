@@ -17,10 +17,10 @@ public class Tag implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "`id`")
+  @Column(name = "`id`", nullable = false)
   private Integer id;
-  @Column(name = "`tag`")
+  @Column(name = "`tag`", nullable = true)
   private String tag;
-  @Column(name = "`created_at`")
+  @Column(name = "`created_at`", nullable = false)
   private Timestamp createdAt;
 }
