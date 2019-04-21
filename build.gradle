@@ -30,6 +30,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.25'
 
     compileOnly 'org.projectlombok:lombok:1.18.2'
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 
     providedCompile gradleApi()
     providedCompile 'org.apache.maven:maven-plugin-api:3.5.4'
@@ -39,6 +40,7 @@ dependencies {
     testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 sourceSets {
@@ -92,7 +94,7 @@ uploadArchives {
         mavenDeployer {
             pom.groupId = 'com.smartnews'
             pom.artifactId = 'jpa-entity-generator'
-            pom.version = '0.99.6-SNAPSHOT'
+            pom.version = '0.99.6'
 
             if (isLocalDeployment) {
                 def localRepoPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath

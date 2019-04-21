@@ -19,20 +19,20 @@ public class BlogArticleTag implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "\"id\"")
+  @Column(name = "\"id\"", nullable = false)
   private Integer id;
   /**
    * database comment for article_id
    * The field is non-null value
    */
-  @Column(name = "\"article_id\"")
+  @Column(name = "\"article_id\"", nullable = false)
   private Integer articleId;
   /**
    * database comment for blog_id
    * The field is non-null value
    */
-  @Column(name = "\"tag_id\"")
+  @Column(name = "\"tag_id\"", nullable = false)
   private Integer tagId;
-  @Column(name = "\"created_at\"")
+  @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
 }

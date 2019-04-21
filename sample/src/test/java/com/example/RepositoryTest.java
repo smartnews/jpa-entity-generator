@@ -9,6 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
@@ -28,9 +31,10 @@ public class RepositoryTest {
         }
         Blog b1 = new Blog();
         b1.setName("First-ever Blog");
+        b1.setCreatedAt(Timestamp.from(Instant.now()));
         blogRepository.save(b1);
-        blogRepository.save(b1.toBuilder().name("Day 1 Blog").build());
-        blogRepository.save(Blog.builder().name("Second Life").build());
+        blogRepository.save(b1.toBuilder().name("Day 1 Blog").createdAt(Timestamp.from(Instant.now())).build());
+        blogRepository.save(Blog.builder().name("Second Life").createdAt(Timestamp.from(Instant.now())).build());
         {
             long numOfBlogs = blogRepository.count();
             assertThat(numOfBlogs, is(2L));

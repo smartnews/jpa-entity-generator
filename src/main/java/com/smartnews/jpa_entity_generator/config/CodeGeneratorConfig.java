@@ -36,7 +36,7 @@ public class CodeGeneratorConfig implements Serializable {
     // Preset
 
     // NOTE: @Table(name = "${tableName}") needs tableName of target table.
-    private static List<ClassAnnotationRule> PRESET_CLASS_ANNOTATIONS = Arrays.asList(
+    private static final List<ClassAnnotationRule> PRESET_CLASS_ANNOTATIONS = Arrays.asList(
             ClassAnnotationRule.createGlobal(Annotation.fromClassName("lombok.Data"))
     );
 
@@ -44,6 +44,11 @@ public class CodeGeneratorConfig implements Serializable {
             ImportRule.createGlobal("java.sql.*"),
             ImportRule.createGlobal("javax.persistence.*"),
             ImportRule.createGlobal("lombok.Data")
+    );
+
+    private static final List<ImportRule> JSR_305_PRESET_IMPORTS = Arrays.asList(
+            ImportRule.createGlobal("javax.annotation.Nonnull"),
+            ImportRule.createGlobal("javax.annotation.Nullable")
     );
     // ----------
 
@@ -102,6 +107,9 @@ public class CodeGeneratorConfig implements Serializable {
             getClassAnnotationRules().addAll(CLASS_ANNOTATIONS_NECESSARY_FOR_LOMBOK_BUILDER);
             getImportRules().addAll(IMPORTS_NECESSARY_FOR_LOMBOK_BUILDER);
         }
+        if (jsr305AnnotationsRequired) {
+            getImportRules().addAll(JSR_305_PRESET_IMPORTS);
+        }
     }
 
     private JDBCSettings jdbcSettings;
@@ -121,6 +129,8 @@ public class CodeGeneratorConfig implements Serializable {
     private String packageName = "com.smartnews.db";
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";
     private boolean jpa1SupportRequired;
+    private boolean jsr305AnnotationsRequired;
+    private boolean usePrimitiveForNonNullField;
 
     // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder
     // see also: https://github.com/rzwitserloot/lombok/issues/816

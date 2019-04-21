@@ -31,6 +31,8 @@ repositories {
 dependencies {
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     providedCompile 'org.projectlombok:lombok:1.18.2'
+    providedCompile 'com.google.code.findbugs:jsr305:3.0.2'
+
 
     testCompile 'com.h2database:h2:1.4.197'
     testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'

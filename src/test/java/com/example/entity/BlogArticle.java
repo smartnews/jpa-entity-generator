@@ -19,19 +19,19 @@ public class BlogArticle implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "\"id\"")
+  @Column(name = "\"id\"", nullable = false)
   private Integer id;
   /**
    * database comment for blog_id
    */
-  @Column(name = "\"blog_id\"")
+  @Column(name = "\"blog_id\"", nullable = true)
   private Integer blogId;
-  @Column(name = "\"name\"")
+  @Column(name = "\"name\"", nullable = true)
   private String name;
   @Deprecated
-  @Column(name = "\"tags\"")
+  @Column(name = "\"tags\"", nullable = true)
   private Clob tags;
-  @Column(name = "\"created_at\"")
+  @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
 
   @lombok.Setter(lombok.AccessLevel.NONE)
