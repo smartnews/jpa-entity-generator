@@ -30,8 +30,8 @@
 
     <repositories>
         <repository>
-            <id>sonatype oss releases</id>
-            <url>https://oss.sonatype.org/content/repositories/releases</url>
+            <id>sonatype oss staging</id>
+            <url>https://oss.sonatype.org/content/repositories/staging</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
