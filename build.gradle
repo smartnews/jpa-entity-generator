@@ -94,7 +94,7 @@ uploadArchives {
         mavenDeployer {
             pom.groupId = 'com.smartnews'
             pom.artifactId = 'jpa-entity-generator'
-            pom.version = '0.99.7-SNAPSHOT'
+            pom.version = '0.99.7'
 
             if (isLocalDeployment) {
                 def localRepoPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath

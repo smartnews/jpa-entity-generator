@@ -26,8 +26,9 @@ public class BlogArticle implements Serializable {
   /**
    * database comment for blog_id
    */
+  @Nullable
   @Column(name = "\"blog_id\"", nullable = true)
-  private int blogId;
+  private Integer blogId;
   @Nullable
   @Column(name = "\"name\"", nullable = true)
   private String name;

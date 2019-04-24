@@ -117,7 +117,7 @@ public class CodeGenerator {
                     f.setPrimitive(isPrimitive(f.getType()));
                 } else {
                     f.setType(TypeConverter.toJavaType(c.getTypeCode()));
-                    if (config.isUsePrimitiveForNonNullField()) {
+                    if (!c.isNullable() && config.isUsePrimitiveForNonNullField()) {
                         f.setType(TypeConverter.toPrimitiveTypeIfPossible(f.getType()));
                     }
                     f.setPrimitive(isPrimitive(f.getType()));
