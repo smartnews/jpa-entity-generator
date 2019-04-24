@@ -9,7 +9,7 @@ buildscript {
   }
   dependencies {
     classpath 'mysql:mysql-connector-java:5.1.46'
-    classpath 'com.smartnews:jpa-entity-generator:0.99.4'
+    classpath 'com.smartnews:jpa-entity-generator:0.99.7'
   }
 }
 
