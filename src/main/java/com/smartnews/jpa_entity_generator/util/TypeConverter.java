@@ -49,7 +49,7 @@ public class TypeConverter {
             // case Types.NCLOB:
             // case Types.NULL:
             case Types.NUMERIC:
-                return "BigDecimal";
+                return "java.math.BigDecimal";
             // case Types.NVARCHAR:
             // case Types.OTHER:
             case Types.REAL:
