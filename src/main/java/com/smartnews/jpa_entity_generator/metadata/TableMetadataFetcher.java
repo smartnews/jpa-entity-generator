@@ -31,7 +31,7 @@ public class TableMetadataFetcher {
         DatabaseMetaData databaseMeta = getMetadata(jdbcSettings);
         try {
             List<String> tableNames = new ArrayList<>();
-            try (ResultSet rs = databaseMeta.getTables(null, null, "%", TABLE_TYPES)) {
+            try (ResultSet rs = databaseMeta.getTables(null,  jdbcSettings.getSchemaName(), "%", TABLE_TYPES)) {
                 while (rs.next()) {
                     tableNames.add(rs.getString("TABLE_NAME"));
                 }
