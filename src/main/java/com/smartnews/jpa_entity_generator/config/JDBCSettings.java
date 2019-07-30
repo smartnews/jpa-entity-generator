@@ -14,5 +14,5 @@ public class JDBCSettings implements Serializable {
     private String username;
     private String password;
     private String driverClassName;
-    private String schemaName;
+    private String schemaPattern;
 }
