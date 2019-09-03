@@ -57,6 +57,7 @@ public class CodeRenderer {
         private String className;
         private String classComment;
 
+        private boolean defaultConstructor = false;
         private boolean jpa1Compatible = false;
         private boolean requireJSR305 = false;
 
@@ -80,6 +81,8 @@ public class CodeRenderer {
             private boolean primaryKey;
             private boolean autoIncrement;
             private boolean primitive;
+            private boolean insertable = true;
+            private boolean updatable = true;
             private String generatedValueStrategy;
             private List<Annotation> annotations = new ArrayList<>();
         }

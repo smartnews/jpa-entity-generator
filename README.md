@@ -5,6 +5,14 @@
 
 This is a Java library which generates Lombok-wired JPA entity source code. The project provides Gradle plugin and Maven plugin.
 
+### update
+rearrange code structure, all modules build passing by maven.
+
+* improve: lombok @Builder will not generate no-arg-constructor, so @Tolerate with a default constructor provided.
+* improve: for datetime field in database, the relevant pojo field type is changed to java.util.Date
+* improve: for the createTime and updateTime of DDL with a default expression, the JPA updatable and insertable is changed to false.
+* fix: the maven plugin name `maven-jpa-entity-generator-plugin` is not legal, changed to `jpa-entity-generator-maven-plugin`.
+
 ### Getting Started
 
 #### build.gradle
@@ -131,4 +139,9 @@ If you need to make sure if your latest code works with sample project or your e
 ```bash
 ./gradlew clean uploadArchives
 mvn deploy -Dmaven.test.skip=true
+```
+
+### install local
+```
+mvn install -Dmaven.test.skip=true -Dgpg.skip -f pom.xml
 ```

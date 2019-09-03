@@ -41,7 +41,6 @@ public class CodeGeneratorConfig implements Serializable {
     );
 
     private static final List<ImportRule> PRESET_IMPORTS = Arrays.asList(
-            ImportRule.createGlobal("java.sql.*"),
             ImportRule.createGlobal("javax.persistence.*"),
             ImportRule.createGlobal("lombok.Data")
     );
@@ -78,6 +77,8 @@ public class CodeGeneratorConfig implements Serializable {
 
     private static final Pattern REPLACE_ENV_VARIABLES_PATTERN = Pattern.compile("(\\$\\{[^}]+\\})");
 
+    private static final Pattern DEFAULT_VALUE_PATTERN = Pattern.compile("\\$\\{(.*):(.*)\\}");
+
     static String replaceEnvVariables(String value) {
         Matcher matcher = REPLACE_ENV_VARIABLES_PATTERN.matcher(value);
         if (matcher.find()) {
@@ -88,6 +89,15 @@ public class CodeGeneratorConfig implements Serializable {
                 String grouped = matcher.group(i + 1);
                 String envKey = grouped.replaceAll("[\\$\\{\\}]", "");
                 String envValue = envVariables.get(envKey);
+
+                Matcher defaultValueMatcher = DEFAULT_VALUE_PATTERN.matcher(grouped);
+                if(defaultValueMatcher.matches()) {
+                    String defaultVal = defaultValueMatcher.group(2);
+                    if (envValue == null && defaultVal != null) {
+                        envValue = defaultVal;
+                    }
+                }
+
                 if (envValue == null) {
                     throw new IllegalStateException("Env variable: " + envKey + " was not found!");
                 } else {

@@ -2,17 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.smartnews</groupId>
-    <artifactId>maven-jpa-entity-generator-plugin</artifactId>
+    <artifactId>jpa-entity-generator</artifactId>
     <packaging>maven-plugin</packaging>
     <version>0.99.8</version>
     <name>maven-entitygen-plugin Maven Mojo</name>
     <url>https://github.com/smartnews/jpa-entity-generator</url>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
 
     <scm>
         <connection>scm:git:git@github.com:smartnews/jpa-entity-generator.git</connection>
@@ -43,6 +37,13 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>Gradle Release</id>
+            <url>https://repo.gradle.org/gradle/libs-releases-local/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <developers>
@@ -54,8 +55,105 @@
     </developers>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <gradle.version>5.6.1</gradle.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>build-gradle-plugin</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-core</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-core-api</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-base-services</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-model-core</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-logging</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-native</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.gradle</groupId>
+                    <artifactId>gradle-messaging</artifactId>
+                    <version>${gradle.version}</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy</artifactId>
+                    <version>2.5.8</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>without-gradle-plugin</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes>
+                                <exclude>com/smartnews/jpa_entity_generator/gradle/*</exclude>
+                            </excludes>
+                            <source>1.8</source>
+                            <target>1.8</target>
+                            <encoding>UTF-8</encoding>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>with-maven-plugin</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+           <dependencies>
+               <dependency>
+                   <groupId>org.apache.maven</groupId>
+                   <artifactId>maven-plugin-api</artifactId>
+                   <version>3.5.4</version>
+                   <scope>compile</scope>
+               </dependency>
+           </dependencies>
+        </profile>
+
+    </profiles>
 
     <build>
         <plugins>
@@ -97,18 +195,6 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>com/smartnews/jpa_entity_generator/config/*</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/gradle/*</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/metadata/*</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/rule/*</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/util/*</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/CodeGenerator.java</exclude>
-                        <exclude>com/smartnews/jpa_entity_generator/CodeRenderer.java</exclude>
-                    </excludes>
-                    <includes>
-                        <include>com/smartnews/jpa_entity_generator/maven/EntityGenMojo.java</include>
-                    </includes>
                     <source>1.8</source>
                     <target>1.8</target>
                     <encoding>UTF-8</encoding>
@@ -142,6 +228,30 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <aggregate>true</aggregate>
+                    <charset>UTF-8</charset>
+                    <docencoding>UTF-8</docencoding>
+                    <excludePackageNames>com.smartnews.jpa_entity_generator.gradle</excludePackageNames>
+                    <tags>
+                        <tag>
+                            <name>phase</name>
+                            <placement>a</placement>
+                            <head>@phase:</head>
+                        </tag>
+                        <tag>
+                            <name>goal</name>
+                            <placement>a</placement>
+                            <head>@goal:</head>
+                        </tag>
+                        <tag>
+                            <name>parameter</name>
+                            <placement>a</placement>
+                            <head>parameter:</head>
+                        </tag>
+                    </tags>
+                </configuration>
                 <version>2.9</version>
                 <executions>
                     <execution>
@@ -160,15 +270,33 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.5.4</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>26.0-jre</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.smartnews</groupId>
-            <artifactId>jpa-entity-generator</artifactId>
-            <version>0.99.8</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.23</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -176,6 +304,30 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.199</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

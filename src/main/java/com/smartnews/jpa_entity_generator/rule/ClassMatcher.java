@@ -39,7 +39,7 @@ public interface ClassMatcher {
         }
 
         List<String> targets = getClassNames();
-        if (targets != null && targets.isEmpty() == false) {
+        if (targets != null && !targets.isEmpty()) {
             boolean matched = targets.contains(className);
             if (matched) {
                 return true;

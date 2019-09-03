@@ -1,6 +1,7 @@
 package com.smartnews.jpa_entity_generator.rule;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
  * Rule used to generate imports.
  */
 @Data
+@EqualsAndHashCode
 public class ImportRule implements Serializable, ClassMatcher {
 
     private String className;

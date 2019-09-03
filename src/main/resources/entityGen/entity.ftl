@@ -16,6 +16,11 @@ ${annotation.toString()}
 @Table(name = "${tableName}")<#if primaryKeyFields.size() \gt 1>
 @IdClass(${className}.PrimaryKeys.class)</#if>
 public class ${className}<#if interfaceNames.size() \gt 0> implements ${interfaceNames?join(", ")}</#if> {
+
+<#if defaultConstructor>
+  @Tolerate
+  public ${className}(){}
+</#if>
 <#if primaryKeyFields.size() \gt 1>
   @Data
   public static class PrimaryKeys implements Serializable {
@@ -49,7 +54,7 @@ ${field.comment}
 <#if requireJSR305 && !field.primitive>
   <#if field.nullable>@Nullable<#else>@Nonnull</#if>
 </#if>
-  @Column(name = "<#if jpa1Compatible>`<#else>\"</#if>${field.columnName}<#if jpa1Compatible>`<#else>\"</#if>", nullable = ${field.nullable?c})
+  @Column(name = "<#if jpa1Compatible>`</#if>${field.columnName}<#if jpa1Compatible>`</#if>"<#if !field.nullable>, nullable = false</#if><#if !field.insertable>, insertable = false</#if><#if !field.updatable>, updatable = false</#if>)
   private ${field.type} ${field.name}<#if field.defaultValue??> = ${field.defaultValue}</#if>;
 </#list>
 <#list bottomAdditionalCodeList as code>

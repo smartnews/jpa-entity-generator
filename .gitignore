@@ -4,7 +4,9 @@ build/
 lib/
 
 *.db
-
+.sts4-cache
+.project
+.vscode
 .DS_Store
 *.iml
 *.ipr

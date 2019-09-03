@@ -1,5 +1,7 @@
 package com.smartnews.jpa_entity_generator.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.sql.Types;
 
 /**
@@ -10,7 +12,7 @@ public class TypeConverter {
     private TypeConverter() {
     }
 
-    public static String toJavaType(int typeCode) {
+    public static String toJavaType(int typeCode, String typeName) {
         switch (typeCode) {
             case Types.ARRAY:
                 return "Array";
@@ -18,8 +20,7 @@ public class TypeConverter {
                 return "Long";
             // case Types.BINARY:
             case Types.BIT:
-                // return "Boolean";
-                return "boolean";
+                 return "Boolean";
             case Types.BLOB:
                 return "Blob";
             case Types.BOOLEAN:
@@ -68,7 +69,7 @@ public class TypeConverter {
             case Types.TIME_WITH_TIMEZONE:
                 return "Time";
             case Types.TIMESTAMP:
-                return "Timestamp";
+                return StringUtils.equals(typeName, "DATETIME")? "java.util.Date" : "Timestamp";
             case Types.TIMESTAMP_WITH_TIMEZONE:
                 return "Timestamp";
             case Types.TINYINT:

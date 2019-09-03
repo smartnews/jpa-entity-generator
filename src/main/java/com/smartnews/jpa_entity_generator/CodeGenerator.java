@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -93,13 +94,24 @@ public class CodeGenerator {
                     .filter(r -> r.matches(className))
                     .collect(toList()));
 
+            ImportRule globalImportDate = ImportRule.createGlobal("java.util.Date");
+            ImportRule globalImportTimestamp = ImportRule.createGlobal("java.sql.Timestamp");
+            ImportRule globalImportClob = ImportRule.createGlobal("java.sql.Clob");
+
             List<CodeRenderer.RenderingData.Field> fields = table.getColumns().stream().map(c -> {
                 CodeRenderer.RenderingData.Field f = new CodeRenderer.RenderingData.Field();
-
                 String fieldName = NameConverter.toFieldName(c.getName());
                 f.setName(fieldName);
                 f.setColumnName(c.getName());
                 f.setNullable(c.isNullable());
+                if ((c.getTypeName().equalsIgnoreCase("DATETIME")
+                    || c.getTypeName().equalsIgnoreCase("TIMESTAMP"))
+                    && StringUtils.contains(c.getColumnDef(), "CURRENT_TIMESTAMP")
+                ) {
+                    f.setInsertable(false);
+                    f.setUpdatable(false);
+                    log.debug("Field {} {} is set NOT to updatable and insertable, because it has default value {}", f.getColumnName(), c.getTypeName(), c.getColumnDef());
+                }
 
                 f.setComment(buildFieldComment(className, f.getName(), c, config.getFieldAdditionalCommentRules()));
 
@@ -116,10 +128,29 @@ public class CodeGenerator {
                     f.setType(fieldTypeRule.get().getTypeName());
                     f.setPrimitive(isPrimitive(f.getType()));
                 } else {
-                    f.setType(TypeConverter.toJavaType(c.getTypeCode()));
+                    f.setType(TypeConverter.toJavaType(c.getTypeCode(), c.getTypeName()));
                     if (!c.isNullable() && config.isUsePrimitiveForNonNullField()) {
                         f.setType(TypeConverter.toPrimitiveTypeIfPossible(f.getType()));
                     }
+
+                    if (f.getType().equals("java.util.Date")) {
+                        if (!data.getImportRules().contains(globalImportDate)) {
+                            data.getImportRules().add(globalImportDate);
+                        }
+                        f.setType("Date");
+                    }
+                    if (f.getType().equals("Timestamp")) {
+                        if (!data.getImportRules().contains(globalImportTimestamp)) {
+                            data.getImportRules().add(globalImportTimestamp);
+                        }
+                        f.setType("Timestamp");
+                    }
+                    if (f.getType().equals("Clob")) {
+                        if (!data.getImportRules().contains(globalImportClob)) {
+                            data.getImportRules().add(globalImportClob);
+                        }
+                    }
+
                     f.setPrimitive(isPrimitive(f.getType()));
                 }
 
@@ -173,6 +204,13 @@ public class CodeGenerator {
                     }))
                     .collect(toList()));
 
+            if (data.getClassAnnotationRules().stream()
+                .anyMatch(x->x.getAnnotations().stream()
+                    .anyMatch(y->y.getClassName().equals("lombok.Builder")))) {
+                data.setDefaultConstructor(true);
+                data.getImportRules().add(ImportRule.createGlobal("lombok.experimental.Tolerate"));
+            }
+
             orEmptyListIfNull(config.getAdditionalCodeRules()).forEach(rule -> {
                 if (rule.matches(className)) {
                     String code = null;
@@ -199,15 +237,23 @@ public class CodeGenerator {
 
             orEmptyListIfNull(data.getImportRules()).sort(Comparator.comparing(ImportRule::getImportValue));
 
+            log.debug("jpa1Compatible {}", data.isJpa1Compatible());
             String code = CodeRenderer.render("entityGen/entity.ftl", data);
 
             String filepath = config.getOutputDirectory() + "/" + data.getPackageName().replaceAll("\\.", "/") + "/" + className + ".java";
             Path path = Paths.get(filepath);
+            File canonicalFile = path.toFile().getCanonicalFile();
+
             if (!Files.exists(path)) {
                 Files.createFile(path);
+            }else {
+                //In case A file existed ABTest.java but next time classname is Abtest
+                if (!canonicalFile.getName().equals(className+".java")) {
+                    canonicalFile.renameTo(new File(filepath));
+                }
             }
-            Files.write(path, code.getBytes());
 
+            Files.write(canonicalFile.toPath(), code.getBytes());
             log.debug("path: {}, code: {}", path, code);
         }
     }

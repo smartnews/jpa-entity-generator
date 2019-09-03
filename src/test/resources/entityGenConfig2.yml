@@ -4,7 +4,7 @@
 jdbcSettings:
   url: "jdbc:h2:file:./sample/db/blog;MODE=MySQL;TRACE_LEVEL_FILE=2;TRACE_LEVEL_SYSTEM_OUT=2"
   username: "user"
-  password: ${DB_PASSWORD}
+  password: ${DB_PASSWORD:pass}
   driverClassName: "org.h2.Driver"
 
 # ---------------------------------------------------------

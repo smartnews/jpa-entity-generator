@@ -2,6 +2,7 @@ package com.smartnews.jpa_entity_generator.metadata;
 
 import com.smartnews.jpa_entity_generator.config.JDBCSettings;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class TableMetadataFetcher {
                     column.setName(rs.getString("COLUMN_NAME"));
                     column.setTypeCode(rs.getInt("DATA_TYPE"));
                     column.setTypeName(rs.getString("TYPE_NAME"));
-
+                    column.setColumnDef(rs.getString("COLUMN_DEF"));
                     // Oracle throws java.sql.SQLException: Invalid column name
                     boolean autoIncrement = false;
                     try {
@@ -105,6 +106,8 @@ public class TableMetadataFetcher {
                         log.debug("Failed to fetch primary key or not for {}.{}", table, column.getName(), e);
                     }
                     column.setPrimaryKey(primaryKey);
+
+                    log.debug("detected column {}", column);
 
                     tableInfo.getColumns().add(column);
                 }
