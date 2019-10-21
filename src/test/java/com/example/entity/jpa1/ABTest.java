@@ -11,9 +11,9 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@Entity(name = "com.example.entity.jpa1.Abtest")
+@Entity(name = "com.example.entity.jpa1.ABTest")
 @Table(name = "ABTEST")
-public class Abtest implements Serializable {
+public class ABTest implements Serializable {
 
 
   @Id
