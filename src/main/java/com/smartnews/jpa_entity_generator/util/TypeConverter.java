@@ -18,8 +18,8 @@ public class TypeConverter {
                 return "Long";
             // case Types.BINARY:
             case Types.BIT:
-                // return "Boolean";
-                return "boolean";
+                // my sql
+                return "Boolean";
             case Types.BLOB:
                 return "Blob";
             case Types.BOOLEAN:

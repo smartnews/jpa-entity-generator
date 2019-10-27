@@ -100,7 +100,13 @@ public class CodeGenerator {
                 f.setName(fieldName);
                 f.setColumnName(c.getName());
                 f.setNullable(c.isNullable());
-
+                if ((c.getTypeName().equalsIgnoreCase("DATETIME")
+                    || c.getTypeName().equalsIgnoreCase("TIMESTAMP"))
+                    && StringUtils.contains(c.getColumnDef(), "CURRENT_TIMESTAMP")
+                ) {
+                    f.setInsertable(false);
+                    f.setUpdatable(false);
+                }
                 f.setComment(buildFieldComment(className, f.getName(), c, config.getFieldAdditionalCommentRules()));
 
                 f.setAnnotations(config.getFieldAnnotationRules().stream()

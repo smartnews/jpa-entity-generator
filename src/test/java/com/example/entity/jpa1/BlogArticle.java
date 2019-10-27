@@ -33,6 +33,12 @@ public class BlogArticle implements Serializable {
   private Clob tags;
   @Column(name = "`created_at`", nullable = false)
   private Timestamp createdAt;
+  @Column(name = "`state`", nullable = true)
+  private Byte state;
+  @Column(name = "`create_time`", nullable = true, insertable = false, updatable = false)
+  private Timestamp createTime;
+  @Column(name = "`update_time`", nullable = true, insertable = false, updatable = false)
+  private Timestamp updateTime;
 
   @lombok.Setter(lombok.AccessLevel.NONE)
   @ManyToOne

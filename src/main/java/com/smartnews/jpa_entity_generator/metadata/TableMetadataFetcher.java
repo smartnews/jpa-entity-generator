@@ -72,7 +72,7 @@ public class TableMetadataFetcher {
                     column.setName(rs.getString("COLUMN_NAME"));
                     column.setTypeCode(rs.getInt("DATA_TYPE"));
                     column.setTypeName(rs.getString("TYPE_NAME"));
-
+                    column.setColumnDef(rs.getString("COLUMN_DEF"));
                     // Oracle throws java.sql.SQLException: Invalid column name
                     boolean autoIncrement = false;
                     try {
