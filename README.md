@@ -28,7 +28,7 @@ repositories {
   mavenCentral()
 }
 dependencies {
-  providedCompile 'org.projectlombok:lombok::1.18.2'
+  providedCompile 'org.projectlombok:lombok:1.18.2'
   providedCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
 }
 
