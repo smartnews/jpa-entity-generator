@@ -39,4 +39,13 @@ public class BlogArticle implements Serializable {
   @Nonnull
   @Column(name = "`created_at`", nullable = false)
   private Timestamp createdAt;
+  @Nullable
+  @Column(name = "`state`", nullable = true)
+  private Byte state;
+  @Nullable
+  @Column(name = "`create_time`", nullable = true, insertable = false, updatable = false)
+  private Timestamp createTime;
+  @Nullable
+  @Column(name = "`update_time`", nullable = true, insertable = false, updatable = false)
+  private Timestamp updateTime;
 }

@@ -26,7 +26,10 @@ public class DatabaseUtil {
                     "id integer primary key auto_increment not null, " +
                     "blog_id integer comment 'database comment for blog_id' references blog(id), " +
                     "name varchar(30), tags text, " +
-                    "created_at timestamp not null" +
+                    "created_at timestamp not null, " +
+                    "state TINYINT(1), " +
+                    "create_time datetime DEFAULT CURRENT_TIMESTAMP, " +
+                    "update_time datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
                     ")").execute();
             conn.prepareStatement("create table tag (" +
                     "id integer primary key auto_increment not null, " +

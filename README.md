@@ -45,7 +45,7 @@ Maven plugin to run the code generator is also available.
 ```xml
 <plugin>
   <groupId>com.smartnews</groupId>
-  <artifactId>maven-jpa-entity-generator-plugin</artifactId>
+  <artifactId>jpa-entity-generator-maven-plugin</artifactId>
   <version>0.99.8</version>
   <dependencies>
     <dependency>

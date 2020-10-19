@@ -13,6 +13,7 @@ public class Column {
     private String name;
     private int typeCode;
     private String typeName;
+    private String columnDef;
     private boolean nullable;
     private boolean primaryKey;
     private boolean autoIncrement;
