@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Predicate;
@@ -139,9 +140,16 @@ public class CodeGenerator {
 
             }).collect(toList());
 
+
             if (fields.stream().noneMatch(hasIdAnnotation)) {
-                throw new IllegalStateException("Entity class " + data.getClassName() + " has no @Id field!");
+                Path filepath = Paths.get(config.getOutputDirectory() + "/output.log");
+                String line = "Entity class " + data.getClassName() + " has no @Id field!\n";
+                if (!Files.exists(filepath)) {
+                    Files.createFile(filepath);
+                }
+                Files.write(filepath, line.getBytes(), StandardOpenOption.APPEND);
             }
+
 
             data.setFields(fields);
             data.setPrimaryKeyFields(fields.stream().filter(CodeRenderer.RenderingData.Field::isPrimaryKey).collect(toList()));
