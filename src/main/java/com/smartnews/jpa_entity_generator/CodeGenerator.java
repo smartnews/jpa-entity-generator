@@ -79,12 +79,12 @@ public class CodeGenerator {
             data.setTableName(table.getName());
 
             ClassAnnotationRule entityClassAnnotationRule = new ClassAnnotationRule();
-            Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
+            //Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
             AnnotationAttribute entityAnnotationValueAttr = new AnnotationAttribute();
             entityAnnotationValueAttr.setName("name");
             entityAnnotationValueAttr.setValue("\"" + data.getPackageName() + "." + data.getClassName() + "\"");
-            entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
-            entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
+            //entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
+            //entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
             entityClassAnnotationRule.setClassName(className);
             config.getClassAnnotationRules().add(entityClassAnnotationRule);
 
@@ -143,11 +143,17 @@ public class CodeGenerator {
 
             if (fields.stream().noneMatch(hasIdAnnotation)) {
                 Path filepath = Paths.get(config.getOutputDirectory() + "/output.log");
-                String line = "Entity class " + data.getClassName() + " has no @Id field!\n";
+                String line = "Entity class " + data.getClassName() + " has no @Id field, @Entity has been remove on this class !\n";
                 if (!Files.exists(filepath)) {
                     Files.createFile(filepath);
                 }
                 Files.write(filepath, line.getBytes(), StandardOpenOption.APPEND);
+                data.setClassAnnotationRules(null);
+            }else{
+                Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
+                entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
+                entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
+                data.getClassAnnotationRules().add(entityClassAnnotationRule);
             }
 
 
