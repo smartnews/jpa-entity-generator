@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.function.Predicate;
@@ -78,12 +79,12 @@ public class CodeGenerator {
             data.setTableName(table.getName());
 
             ClassAnnotationRule entityClassAnnotationRule = new ClassAnnotationRule();
-            Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
+            //Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
             AnnotationAttribute entityAnnotationValueAttr = new AnnotationAttribute();
             entityAnnotationValueAttr.setName("name");
             entityAnnotationValueAttr.setValue("\"" + data.getPackageName() + "." + data.getClassName() + "\"");
-            entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
-            entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
+            //entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
+            //entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
             entityClassAnnotationRule.setClassName(className);
             config.getClassAnnotationRules().add(entityClassAnnotationRule);
 
@@ -139,9 +140,22 @@ public class CodeGenerator {
 
             }).collect(toList());
 
+
             if (fields.stream().noneMatch(hasIdAnnotation)) {
-                throw new IllegalStateException("Entity class " + data.getClassName() + " has no @Id field!");
+                Path filepath = Paths.get(config.getOutputDirectory() + "/output.log");
+                String line = "Entity class " + data.getClassName() + " has no @Id field, @Entity has been remove on this class !\n";
+                if (!Files.exists(filepath)) {
+                    Files.createFile(filepath);
+                }
+                Files.write(filepath, line.getBytes(), StandardOpenOption.APPEND);
+                data.setClassAnnotationRules(null);
+            }else{
+                Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
+                entityAnnotation.getAttributes().add(entityAnnotationValueAttr);
+                entityClassAnnotationRule.setAnnotations(Arrays.asList(entityAnnotation));
+                data.getClassAnnotationRules().add(entityClassAnnotationRule);
             }
+
 
             data.setFields(fields);
             data.setPrimaryKeyFields(fields.stream().filter(CodeRenderer.RenderingData.Field::isPrimaryKey).collect(toList()));

@@ -43,7 +43,8 @@ public class CodeGeneratorConfig implements Serializable {
     private static final List<ImportRule> PRESET_IMPORTS = Arrays.asList(
             ImportRule.createGlobal("java.sql.*"),
             ImportRule.createGlobal("javax.persistence.*"),
-            ImportRule.createGlobal("lombok.Data")
+            ImportRule.createGlobal("lombok.Data"),
+            ImportRule.createGlobal("java.io.Serializable")
     );
 
     private static final List<ImportRule> JSR_305_PRESET_IMPORTS = Arrays.asList(
