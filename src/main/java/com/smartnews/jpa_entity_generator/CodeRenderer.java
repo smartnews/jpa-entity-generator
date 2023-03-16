@@ -58,7 +58,7 @@ public class CodeRenderer {
         private String classComment;
 
         private boolean jpa1Compatible = false;
-        private boolean requireJSR305 = false;
+        private boolean requireJakartaAnnotation = false;
 
         private List<String> topAdditionalCodeList = new ArrayList<>();
         private List<String> bottomAdditionalCodeList = new ArrayList<>();
