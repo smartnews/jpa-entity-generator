@@ -33,13 +33,15 @@ dependencies {
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 
     providedCompile gradleApi()
-    providedCompile 'org.apache.maven:maven-plugin-api:3.9.0'
+    providedCompile 'org.apache.maven:maven-plugin-api:3.5.4'
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.h2database:h2:1.4.197'
+    testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     testCompile 'jakarta.persistence:jakarta.persistence-api:3.0.0'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
+    testCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 }
 

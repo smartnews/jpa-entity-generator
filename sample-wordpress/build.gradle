@@ -23,12 +23,12 @@ repositories {
 }
 dependencies {
   compile 'mysql:mysql-connector-java:5.1.46'
-  compile 'jakarta.persistence:jakarta.persistence-api:3.0.0'
+  compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
   providedCompile 'org.projectlombok:lombok:1.18.2'
 
-  testCompile 'org.springframework.data:spring-data-jpa:3.0.3'
-  testCompile 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.3'
-  testCompile 'org.springframework.boot:spring-boot-starter-test:3.0.3'
+  testCompile 'org.springframework.data:spring-data-jpa:2.0.6.RELEASE'
+  testCompile 'org.springframework.boot:spring-boot-starter-data-jpa:2.0.1.RELEASE'
+  testCompile 'org.springframework.boot:spring-boot-starter-test:2.0.1.RELEASE'
 
   // https://github.com/spring-projects/spring-boot/issues/11042
   testCompile 'javax.xml.bind:jaxb-api:2.3.0'
