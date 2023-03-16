@@ -40,6 +40,13 @@ public class CodeGenerator {
         return isPrimaryKey || hasIdAnnotation;
     };
 
+    private static final Predicate<CodeRenderer.RenderingData.Field> hasJakartaIdAnnotation = (f) -> {
+        boolean isPrimaryKey = f.isPrimaryKey();
+        boolean hasIdAnnotation = f.getAnnotations().stream()
+                .anyMatch(a -> EXPECTED_ID_JAKARTA_ANNOTATION_CLASS_NAMES.contains(a.getClassName()));
+        return isPrimaryKey || hasIdAnnotation;
+    };
+
     public static void generateAll(CodeGeneratorConfig originalConfig) throws SQLException, IOException, TemplateException {
         generateAll(originalConfig, false);
     }
@@ -142,7 +149,8 @@ public class CodeGenerator {
 
             }).collect(toList());
 
-            if (fields.stream().noneMatch(hasIdAnnotation)) {
+            Predicate<CodeRenderer.RenderingData.Field> fieldPredicate = data.isUseJakarta() ? hasJakartaIdAnnotation : hasIdAnnotation;
+            if (fields.stream().noneMatch(fieldPredicate)) {
                 throw new IllegalStateException("Entity class " + data.getClassName() + " has no @Id field!");
             }
 
