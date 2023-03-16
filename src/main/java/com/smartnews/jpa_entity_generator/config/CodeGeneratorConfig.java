@@ -42,8 +42,19 @@ public class CodeGeneratorConfig implements Serializable {
 
     private static final List<ImportRule> PRESET_IMPORTS = Arrays.asList(
             ImportRule.createGlobal("java.sql.*"),
+            ImportRule.createGlobal("javax.persistence.*"),
+            ImportRule.createGlobal("lombok.Data")
+    );
+
+    private static final List<ImportRule> PRESET_JAKARTA_IMPORTS = Arrays.asList(
+            ImportRule.createGlobal("java.sql.*"),
             ImportRule.createGlobal("jakarta.persistence.*"),
             ImportRule.createGlobal("lombok.Data")
+    );
+
+    private static final List<ImportRule> JSR_305_PRESET_IMPORTS = Arrays.asList(
+            ImportRule.createGlobal("javax.annotation.Nonnull"),
+            ImportRule.createGlobal("javax.annotation.Nullable")
     );
 
     private static final List<ImportRule> JAKARTA_ANNOTATION_PRESET_IMPORTS = Arrays.asList(
@@ -102,13 +113,21 @@ public class CodeGeneratorConfig implements Serializable {
 
     public void setUpPresetRules() {
         getClassAnnotationRules().addAll(0, PRESET_CLASS_ANNOTATIONS);
-        getImportRules().addAll(0, PRESET_IMPORTS);
+        if (useJakarta) {
+            getImportRules().addAll(0, PRESET_JAKARTA_IMPORTS);
+        } else {
+            getImportRules().addAll(0, PRESET_IMPORTS);
+        }
         if (autoPreparationForLombokBuilderEnabled) {
             getClassAnnotationRules().addAll(CLASS_ANNOTATIONS_NECESSARY_FOR_LOMBOK_BUILDER);
             getImportRules().addAll(IMPORTS_NECESSARY_FOR_LOMBOK_BUILDER);
         }
-        if (jakartaAnnotationsRequired) {
-            getImportRules().addAll(JAKARTA_ANNOTATION_PRESET_IMPORTS);
+        if (jsr305AnnotationsRequired) {
+            if (useJakarta) {
+                getImportRules().addAll(JAKARTA_ANNOTATION_PRESET_IMPORTS);
+            } else {
+                getImportRules().addAll(JSR_305_PRESET_IMPORTS);
+            }
         }
     }
 
@@ -129,7 +148,8 @@ public class CodeGeneratorConfig implements Serializable {
     private String packageName = "com.smartnews.db";
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";
     private boolean jpa1SupportRequired;
-    private boolean jakartaAnnotationsRequired;
+    private boolean jsr305AnnotationsRequired;
+    private boolean useJakarta;
     private boolean usePrimitiveForNonNullField;
 
     // NOTE: Explicitly having NoArgsConstructor/AllArgsConstructor is necessary as as a workaround to enable using @Builder

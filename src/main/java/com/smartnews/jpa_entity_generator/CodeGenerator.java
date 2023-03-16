@@ -30,7 +30,8 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class CodeGenerator {
 
-    private static final List<String> EXPECTED_ID_ANNOTATION_CLASS_NAMES = Arrays.asList("Id", "jakarta.persistence.Id");
+    private static final List<String> EXPECTED_ID_ANNOTATION_CLASS_NAMES = Arrays.asList("Id", "javax.persistence.Id");
+    private static final List<String> EXPECTED_ID_JAKARTA_ANNOTATION_CLASS_NAMES = Arrays.asList("Id", "jakarta.persistence.Id");
 
     private static final Predicate<CodeRenderer.RenderingData.Field> hasIdAnnotation = (f) -> {
         boolean isPrimaryKey = f.isPrimaryKey();
@@ -65,7 +66,8 @@ public class CodeGenerator {
 
             CodeRenderer.RenderingData data = new CodeRenderer.RenderingData();
             data.setJpa1Compatible(isJpa1);
-            data.setRequireJakartaAnnotation(config.isJakartaAnnotationsRequired());
+            data.setRequireJSR305(config.isJsr305AnnotationsRequired());
+            data.setUseJakarta(config.isUseJakarta());
 
             if (isJpa1) {
                 data.setPackageName(config.getPackageNameForJpa1());
@@ -78,7 +80,8 @@ public class CodeGenerator {
             data.setTableName(table.getName());
 
             ClassAnnotationRule entityClassAnnotationRule = new ClassAnnotationRule();
-            Annotation entityAnnotation = Annotation.fromClassName("jakarta.persistence.Entity");
+            String entityClassName = data.isUseJakarta() ? "jakarta.persistence.Entity" : "javax.persistence.Entity";
+            Annotation entityAnnotation = Annotation.fromClassName(entityClassName);
             AnnotationAttribute entityAnnotationValueAttr = new AnnotationAttribute();
             entityAnnotationValueAttr.setName("name");
             entityAnnotationValueAttr.setValue("\"" + data.getPackageName() + "." + data.getClassName() + "\"");

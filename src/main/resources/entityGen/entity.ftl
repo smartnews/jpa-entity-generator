@@ -46,7 +46,7 @@ ${field.comment}
 <#list field.annotations as annotation>
   ${annotation.toString()}
 </#list>
-<#if requireJakartaAnnotation && !field.primitive>
+<#if requireJSR305 && !field.primitive>
   <#if field.nullable>@Nullable<#else>@Nonnull</#if>
 </#if>
   @Column(name = "<#if jpa1Compatible>`<#else>\"</#if>${field.columnName}<#if jpa1Compatible>`<#else>\"</#if>", nullable = ${field.nullable?c})
