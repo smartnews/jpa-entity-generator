@@ -19,7 +19,7 @@
 -- Current Database: `wordpress`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `wordpress` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE IF NOT EXISTS `wordpress` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
 USE `wordpress`;
 
