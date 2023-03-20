@@ -112,6 +112,43 @@ public class Blog {
 }
 ```
 
+### How to develop on your local machine
+
+This repo contains 3 parts, `src`, `sample` and `sample-wordpress`. 
+
+#### src
+- Source code of this repo, any changes should be made in here
+
+#### sample
+- Sample project use `h2` and latest local code work
+- Code under `com.example.entity` is auto generated class 
+  - You can delete them when you make any break changes and recreate through `./gradlew entityGen`
+
+Setup for running `./gradlew entityGen` for this project
+```sh
+#In repo root directory
+./test.sh
+```
+After running `./test.sh` successfully, a h2 file database will be created locally. And project is able to retrieve database scheme.
+
+If you need to make sure if your latest code works with sample project or your existing projects, run the following command to publish the latest build to the local Maven repository.
+
+```sh
+./gradlew uploadArchives -Plocal
+```
+
+#### sample-wordpress
+- Sample project use `mysql` and latest published library
+- Code under `com.example.entity` is auto generated class
+  - You can delete them when you make any break changes and recreate through `./gradlew entityGen`
+
+Setup for running `./gradlew entityGen` for this project
+```sh
+# Install mysql 5.7
+cd sample-wordpress
+./bin/create_local_database.sh # If no permission to run, run chmod +x first
+```
+
 ### How to test on your local machine
 
 To run the unit tests, simply run the following script as the TravisCI build does.
@@ -120,11 +157,8 @@ To run the unit tests, simply run the following script as the TravisCI build doe
 ./test.sh
 ```
 
-If you need to make sure if your latest code works with sample project or your existing projects, run the following command to publish the latest build to the local Maven repository.
-
-```sh
-./gradlew uploadArchives -Plocal
-```
+If you make any break change that make test fail, you can try to delete classes under `com.example.entity(2 | 3 | 4)` in `test` folder.
+And re-run this script to create new entity classes that include your changes.
 
 ### How to release new version
 

@@ -37,10 +37,12 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.h2database:h2:1.4.197'
+    // Can be removed after no javax support
     testCompile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
     testCompile 'jakarta.persistence:jakarta.persistence-api:3.0.0'
 
     testCompileOnly 'org.projectlombok:lombok:1.18.2'
+    // Can be removed after no javax support
     testCompileOnly 'com.google.code.findbugs:jsr305:3.0.2'
     testCompileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 }

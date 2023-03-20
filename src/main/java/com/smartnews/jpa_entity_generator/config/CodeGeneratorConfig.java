@@ -42,6 +42,7 @@ public class CodeGeneratorConfig implements Serializable {
 
     private static final List<ImportRule> PRESET_IMPORTS = Arrays.asList(
             ImportRule.createGlobal("java.sql.*"),
+            // Can be removed after no javax support and replace to jakarta.persistence.*
             ImportRule.createGlobal("javax.persistence.*"),
             ImportRule.createGlobal("lombok.Data")
     );
@@ -52,6 +53,7 @@ public class CodeGeneratorConfig implements Serializable {
             ImportRule.createGlobal("lombok.Data")
     );
 
+    // Can be removed after no javax support
     private static final List<ImportRule> JSR_305_PRESET_IMPORTS = Arrays.asList(
             ImportRule.createGlobal("javax.annotation.Nonnull"),
             ImportRule.createGlobal("javax.annotation.Nullable")
@@ -149,6 +151,7 @@ public class CodeGeneratorConfig implements Serializable {
     private String packageNameForJpa1 = "com.smartnews.db.jpa1";
     private boolean jpa1SupportRequired;
     private boolean jsr305AnnotationsRequired;
+    // Can be removed after no javax support and replace jsr305AnnotationsRequired to jakartaAnnotationRequired
     private boolean useJakarta;
     private boolean usePrimitiveForNonNullField;
 
