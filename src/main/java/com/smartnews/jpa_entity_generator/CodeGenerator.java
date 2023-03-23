@@ -31,11 +31,19 @@ import static java.util.stream.Collectors.toList;
 public class CodeGenerator {
 
     private static final List<String> EXPECTED_ID_ANNOTATION_CLASS_NAMES = Arrays.asList("Id", "javax.persistence.Id");
+    private static final List<String> EXPECTED_ID_JAKARTA_ANNOTATION_CLASS_NAMES = Arrays.asList("Id", "jakarta.persistence.Id");
 
     private static final Predicate<CodeRenderer.RenderingData.Field> hasIdAnnotation = (f) -> {
         boolean isPrimaryKey = f.isPrimaryKey();
         boolean hasIdAnnotation = f.getAnnotations().stream()
                 .anyMatch(a -> EXPECTED_ID_ANNOTATION_CLASS_NAMES.contains(a.getClassName()));
+        return isPrimaryKey || hasIdAnnotation;
+    };
+
+    private static final Predicate<CodeRenderer.RenderingData.Field> hasJakartaIdAnnotation = (f) -> {
+        boolean isPrimaryKey = f.isPrimaryKey();
+        boolean hasIdAnnotation = f.getAnnotations().stream()
+                .anyMatch(a -> EXPECTED_ID_JAKARTA_ANNOTATION_CLASS_NAMES.contains(a.getClassName()));
         return isPrimaryKey || hasIdAnnotation;
     };
 
@@ -66,6 +74,7 @@ public class CodeGenerator {
             CodeRenderer.RenderingData data = new CodeRenderer.RenderingData();
             data.setJpa1Compatible(isJpa1);
             data.setRequireJSR305(config.isJsr305AnnotationsRequired());
+            data.setUseJakarta(config.isUseJakarta());
 
             if (isJpa1) {
                 data.setPackageName(config.getPackageNameForJpa1());
@@ -78,7 +87,8 @@ public class CodeGenerator {
             data.setTableName(table.getName());
 
             ClassAnnotationRule entityClassAnnotationRule = new ClassAnnotationRule();
-            Annotation entityAnnotation = Annotation.fromClassName("javax.persistence.Entity");
+            String entityClassName = data.isUseJakarta() ? "jakarta.persistence.Entity" : "javax.persistence.Entity";
+            Annotation entityAnnotation = Annotation.fromClassName(entityClassName);
             AnnotationAttribute entityAnnotationValueAttr = new AnnotationAttribute();
             entityAnnotationValueAttr.setName("name");
             entityAnnotationValueAttr.setValue("\"" + data.getPackageName() + "." + data.getClassName() + "\"");
@@ -139,7 +149,8 @@ public class CodeGenerator {
 
             }).collect(toList());
 
-            if (fields.stream().noneMatch(hasIdAnnotation)) {
+            Predicate<CodeRenderer.RenderingData.Field> fieldPredicate = data.isUseJakarta() ? hasJakartaIdAnnotation : hasIdAnnotation;
+            if (fields.stream().noneMatch(fieldPredicate)) {
                 throw new IllegalStateException("Entity class " + data.getClassName() + " has no @Id field!");
             }
 

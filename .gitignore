@@ -15,3 +15,4 @@ classes
 out
 output/
 target/
+.java-version
