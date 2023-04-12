@@ -163,6 +163,7 @@ And re-run this script to create new entity classes that include your changes.
 ### How to release new version
 
 ```bash
-./gradlew clean uploadArchives
-mvn deploy -Dmaven.test.skip=true
+./gradlew clean uploadArchives     // This will publish new version of library
+mvn deploy -Dmaven.test.skip=true  // This will publish new version of plugin
 ```
+After run above commands successfully, please go through [this release process](https://central.sonatype.org/publish/release/#close-and-drop-or-release-your-staging-repository) if it is your first time.

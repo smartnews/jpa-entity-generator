@@ -92,13 +92,14 @@ if (!isLocalDeployment) {
     }
 }
 
+// Refer to this page https://central.sonatype.org/publish/publish-gradle/
 try {
 uploadArchives {
     repositories {
         mavenDeployer {
             pom.groupId = 'com.smartnews'
             pom.artifactId = 'jpa-entity-generator'
-            pom.version = '0.99.9'
+            pom.version = '0.99.9' // Please update this version manually
 
             if (isLocalDeployment) {
                 def localRepoPath = 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath

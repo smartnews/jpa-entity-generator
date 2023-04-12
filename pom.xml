@@ -4,7 +4,7 @@
     <groupId>com.smartnews</groupId>
     <artifactId>maven-jpa-entity-generator-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.99.9</version>
+    <version>0.99.9</version> <!-- Please update this version number manually -->
     <name>maven-entitygen-plugin Maven Mojo</name>
     <url>https://github.com/smartnews/jpa-entity-generator</url>
 
