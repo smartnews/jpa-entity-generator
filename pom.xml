@@ -4,7 +4,7 @@
     <groupId>com.smartnews</groupId>
     <artifactId>maven-jpa-entity-generator-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.99.8</version>
+    <version>0.99.9</version> <!-- Please update this version number manually -->
     <name>maven-entitygen-plugin Maven Mojo</name>
     <url>https://github.com/smartnews/jpa-entity-generator</url>
 
@@ -28,22 +28,16 @@
         </license>
     </licenses>
 
-    <repositories>
+    <distributionManagement>
         <repository>
             <id>sonatype oss staging</id>
-            <url>https://oss.sonatype.org/content/repositories/staging</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-        <repository>
+        <snapshotRepository>
             <id>sonatype oss snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+        </snapshotRepository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -82,6 +76,11 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
+<!--                    Please refer to this page https://central.sonatype.org/publish/publish-maven/#gpg-signed-components  -->
+<!--                    <configuration>                                                                                      -->
+<!--                        <keyname>${gpg.keyname}</keyname>                                                                -->
+<!--                        <passphraseServerId>${gpg.keyname}</passphraseServerId>                                          -->
+<!--                    </configuration>-->
                     </execution>
                 </executions>
             </plugin>
@@ -169,6 +168,12 @@
             <groupId>com.smartnews</groupId>
             <artifactId>jpa-entity-generator</artifactId>
             <version>0.99.8</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
