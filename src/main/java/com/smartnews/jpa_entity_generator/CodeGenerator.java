@@ -13,6 +13,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -110,7 +111,13 @@ public class CodeGenerator {
                 f.setName(fieldName);
                 f.setColumnName(c.getName());
                 f.setNullable(c.isNullable());
-
+                if ((c.getTypeName().equalsIgnoreCase("DATETIME")
+                    || c.getTypeName().equalsIgnoreCase("TIMESTAMP"))
+                    && StringUtils.contains(c.getColumnDef(), "CURRENT_TIMESTAMP")
+                ) {
+                    f.setInsertable(false);
+                    f.setUpdatable(false);
+                }
                 f.setComment(buildFieldComment(className, f.getName(), c, config.getFieldAdditionalCommentRules()));
 
                 f.setAnnotations(config.getFieldAnnotationRules().stream()
@@ -217,7 +224,7 @@ public class CodeGenerator {
             if (!Files.exists(path)) {
                 Files.createFile(path);
             }
-            Files.write(path, code.getBytes());
+            Files.write(path, code.getBytes(StandardCharsets.UTF_8));
 
             log.debug("path: {}, code: {}", path, code);
         }
