@@ -31,6 +31,7 @@ public class DatabaseUtil {
             conn.prepareStatement("create table tag (" +
                     "id integer primary key auto_increment not null, " +
                     "tag varchar(100), " +
+                    "average numeric(9,2), " +
                     "created_at timestamp not null" +
                     ")").execute();
             conn.prepareStatement("create table article_tag (" +

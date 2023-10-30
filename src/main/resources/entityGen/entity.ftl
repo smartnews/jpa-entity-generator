@@ -49,7 +49,7 @@ ${field.comment}
 <#if requireJSR305 && !field.primitive>
   <#if field.nullable>@Nullable<#else>@Nonnull</#if>
 </#if>
-  @Column(name = "<#if jpa1Compatible>`<#else>\"</#if>${field.columnName}<#if jpa1Compatible>`<#else>\"</#if>", nullable = ${field.nullable?c})
+  @Column(name = "<#if jpa1Compatible>`<#else>\"</#if>${field.columnName}<#if jpa1Compatible>`<#else>\"</#if>", nullable = ${field.nullable?c}<#if field.length??>, length = ${field.length?c}</#if><#if field.precision??>, precision = ${field.precision?c}</#if><#if field.scale??>, scale = ${field.scale?c}</#if>)
   private ${field.type} ${field.name}<#if field.defaultValue??> = ${field.defaultValue}</#if>;
 </#list>
 <#list bottomAdditionalCodeList as code>

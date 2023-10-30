@@ -22,8 +22,11 @@ public class Tag implements Serializable {
   @Column(name = "`id`", nullable = false)
   private int id;
   @Nullable
-  @Column(name = "`tag`", nullable = true)
+  @Column(name = "`tag`", nullable = true, length = 100)
   private String tag;
+  @Nullable
+  @Column(name = "`average`", nullable = true, precision = 9, scale = 2)
+  private java.math.BigDecimal average;
   @Nonnull
   @Column(name = "`created_at`", nullable = false)
   private Timestamp createdAt;

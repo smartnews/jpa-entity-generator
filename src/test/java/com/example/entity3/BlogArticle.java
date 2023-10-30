@@ -26,7 +26,7 @@ public class BlogArticle implements Serializable {
    */
   @Column(name = "\"blog_id\"", nullable = true)
   private Integer blogId;
-  @Column(name = "\"name\"", nullable = true)
+  @Column(name = "\"name\"", nullable = true, length = 30)
   private String name;
   @Deprecated
   @Column(name = "\"tags\"", nullable = true)

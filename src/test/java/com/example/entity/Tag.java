@@ -19,8 +19,10 @@ public class Tag implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "\"id\"", nullable = false)
   private Integer id;
-  @Column(name = "\"tag\"", nullable = true)
+  @Column(name = "\"tag\"", nullable = true, length = 100)
   private String tag;
+  @Column(name = "\"average\"", nullable = true, precision = 9, scale = 2)
+  private java.math.BigDecimal average;
   @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
 }

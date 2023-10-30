@@ -13,6 +13,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -131,6 +132,15 @@ public class CodeGenerator {
                         f.setType(TypeConverter.toPrimitiveTypeIfPossible(f.getType()));
                     }
                     f.setPrimitive(isPrimitive(f.getType()));
+                }
+
+                if ("String".equals(f.getType())) {
+                    f.setLength(c.getColumnSize());
+                }
+
+                if ("java.math.BigDecimal".equals(f.getType())) {
+                    f.setPrecision(c.getColumnSize());
+                    f.setScale(c.getDecimalDigits());
                 }
 
                 Optional<FieldDefaultValueRule> fieldDefaultValueRule =
