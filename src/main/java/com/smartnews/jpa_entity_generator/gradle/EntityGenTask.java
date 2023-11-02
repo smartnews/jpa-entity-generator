@@ -20,7 +20,7 @@ public class EntityGenTask extends DefaultTask {
         if (ext == null) {
             ext = new EntityGenExtension();
         }
-        CodeGeneratorConfig config = CodeGeneratorConfig.load(ext.getConfigPath());
+        CodeGeneratorConfig config = CodeGeneratorConfig.load(ext.getConfigPath(), ext.getEnvironment());
         if (config.isJpa1SupportRequired()) {
             if (config.getPackageName().equals(config.getPackageNameForJpa1())) {
                 throw new IllegalStateException("packageName and packageNameForJpa1 must be different.");

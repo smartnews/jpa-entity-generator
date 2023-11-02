@@ -2,8 +2,8 @@ package com.smartnews.jpa_entity_generator.config;
 
 import org.junit.Test;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +40,16 @@ public class CodeGeneratorConfigTest {
         String k3 = keys.get(2);
         String v3 = env.get(k3);
 
-        assertThat(replaceEnvVariables("${" + k1 + "} is missing!"), is(v1 + " is missing!"));
-        assertThat(replaceEnvVariables("You are the ${" + k2 + "}"), is("You are the " + v2));
-        assertThat(replaceEnvVariables("${" + k3 + "}"), is(v3));
-        assertThat(replaceEnvVariables("as is $"), is("as is $"));
+        HashMap<String, String> environment = new HashMap<>();
+        String k4 = "test";
+        String v4 = "test";
+        environment.put(k4, v4);
+
+        assertThat(replaceEnvVariables("${" + k1 + "} is missing!", environment), is(v1 + " is missing!"));
+        assertThat(replaceEnvVariables("You are the ${" + k2 + "}", environment), is("You are the " + v2));
+        assertThat(replaceEnvVariables("${" + k3 + "}", environment), is(v3));
+        assertThat(replaceEnvVariables("You can override ${" + k4 + "}", environment), is("You can override " + v4));
+        assertThat(replaceEnvVariables("as is $", environment), is("as is $"));
     }
 
 }

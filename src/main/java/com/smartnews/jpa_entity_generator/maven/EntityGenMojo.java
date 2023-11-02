@@ -6,11 +6,16 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @goal generateAll
  * @phase process-sources
  */
 public class EntityGenMojo extends AbstractMojo {
+
+    protected Map<String, String> environment = new HashMap<>();
 
     /**
      * @parameter configPath
@@ -20,7 +25,7 @@ public class EntityGenMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException {
         try {
-            CodeGeneratorConfig config = CodeGeneratorConfig.load(configPath);
+            CodeGeneratorConfig config = CodeGeneratorConfig.load(configPath, environment);
             CodeGenerator.generateAll(config);
         } catch (Exception e) {
             throw new MojoExecutionException(e.getMessage(), e);
