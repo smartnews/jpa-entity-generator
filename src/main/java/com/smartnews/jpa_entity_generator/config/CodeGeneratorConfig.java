@@ -89,27 +89,16 @@ public class CodeGeneratorConfig implements Serializable {
     private static final Pattern REPLACE_ENV_VARIABLES_PATTERN = Pattern.compile("(\\$\\{[^}]+\\})");
 
     static String replaceEnvVariables(String value, Map<String, String> environment) {
-        Matcher matcher = REPLACE_ENV_VARIABLES_PATTERN.matcher(value);
-        if (matcher.find()) {
-            String replacedValue = value;
+        Map<String, String> envMap = new HashMap<>(environment);
+        envMap.putAll(System.getenv());
+        String text = value;
 
-            Map<String, String> envVariables = new HashMap<>(environment);
-            envVariables.putAll(System.getenv());
-
-            for (int i = 0; i < matcher.groupCount(); i++) {
-                String grouped = matcher.group(i + 1);
-                String envKey = grouped.replaceAll("[\\$\\{\\}]", "");
-                String envValue = envVariables.get(envKey);
-                if (envValue == null) {
-                    throw new IllegalStateException("Env variable: " + envKey + " was not found!");
-                } else {
-                    replacedValue = replacedValue.replace(grouped, envValue);
-                }
-            }
-            return replacedValue;
-        } else {
-            return value;
+        for (Map.Entry<String, String> entry : envMap.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            text = text.replaceAll("\\$\\{" + k + "}", v);
         }
+        return text;
     }
 
     public void setUpPresetRules() {

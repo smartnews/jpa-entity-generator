@@ -50,6 +50,7 @@ public class CodeGeneratorConfigTest {
         assertThat(replaceEnvVariables("${" + k3 + "}", environment), is(v3));
         assertThat(replaceEnvVariables("You can override ${" + k4 + "}", environment), is("You can override " + v4));
         assertThat(replaceEnvVariables("as is $", environment), is("as is $"));
+        assertThat(replaceEnvVariables("${" + k1 + "}${" + k2 + "}", environment), is(v1 + v2));
     }
 
 }
