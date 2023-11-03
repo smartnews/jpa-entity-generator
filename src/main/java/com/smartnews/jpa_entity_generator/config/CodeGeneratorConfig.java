@@ -6,10 +6,7 @@ import lombok.Data;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,20 +65,20 @@ public class CodeGeneratorConfig implements Serializable {
     public CodeGeneratorConfig() {
     }
 
-    public void loadEnvVariables() {
+    public void loadEnvVariables(Map<String, String> environment) {
         // JDBC settings
         JDBCSettings settings = getJdbcSettings();
         if (hasEnvVariables(settings.getUrl())) {
-            settings.setUrl(replaceEnvVariables(settings.getUrl()));
+            settings.setUrl(replaceEnvVariables(settings.getUrl(), environment));
         }
         if (hasEnvVariables(settings.getUsername())) {
-            settings.setUsername(replaceEnvVariables(settings.getUsername()));
+            settings.setUsername(replaceEnvVariables(settings.getUsername(), environment));
         }
         if (hasEnvVariables(settings.getPassword())) {
-            settings.setPassword(replaceEnvVariables(settings.getPassword()));
+            settings.setPassword(replaceEnvVariables(settings.getPassword(), environment));
         }
         if (hasEnvVariables(settings.getDriverClassName())) {
-            settings.setDriverClassName(replaceEnvVariables(settings.getDriverClassName()));
+            settings.setDriverClassName(replaceEnvVariables(settings.getDriverClassName(), environment));
         }
     }
 
@@ -91,26 +88,17 @@ public class CodeGeneratorConfig implements Serializable {
 
     private static final Pattern REPLACE_ENV_VARIABLES_PATTERN = Pattern.compile("(\\$\\{[^}]+\\})");
 
-    static String replaceEnvVariables(String value) {
-        Matcher matcher = REPLACE_ENV_VARIABLES_PATTERN.matcher(value);
-        if (matcher.find()) {
-            String replacedValue = value;
-            Map<String, String> envVariables = System.getenv();
+    static String replaceEnvVariables(String value, Map<String, String> environment) {
+        Map<String, String> envMap = new HashMap<>(environment);
+        envMap.putAll(System.getenv());
+        String text = value;
 
-            for (int i = 0; i < matcher.groupCount(); i++) {
-                String grouped = matcher.group(i + 1);
-                String envKey = grouped.replaceAll("[\\$\\{\\}]", "");
-                String envValue = envVariables.get(envKey);
-                if (envValue == null) {
-                    throw new IllegalStateException("Env variable: " + envKey + " was not found!");
-                } else {
-                    replacedValue = replacedValue.replace(grouped, envValue);
-                }
-            }
-            return replacedValue;
-        } else {
-            return value;
+        for (Map.Entry<String, String> entry : envMap.entrySet()) {
+            String k = entry.getKey();
+            String v = entry.getValue();
+            text = text.replaceAll("\\$\\{" + k + "}", v);
         }
+        return text;
     }
 
     public void setUpPresetRules() {
@@ -175,11 +163,11 @@ public class CodeGeneratorConfig implements Serializable {
 
     private static final Yaml YAML = new Yaml();
 
-    public static CodeGeneratorConfig load(String path) throws IOException {
+    public static CodeGeneratorConfig load(String path, Map<String, String> environment) throws IOException {
         try (InputStream is = ResourceReader.getResourceAsStream(path)) {
             try (Reader reader = new InputStreamReader(is)) {
                 CodeGeneratorConfig config = YAML.loadAs(reader, CodeGeneratorConfig.class);
-                config.loadEnvVariables();
+                config.loadEnvVariables(environment);
                 config.setUpPresetRules();
                 return config;
             }

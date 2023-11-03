@@ -35,6 +35,8 @@ dependencies {
 apply plugin: 'entitygen'
 entityGen {
     configPath = 'src/main/resources/entityGenConfig.yml'
+    // You can pass environment variable here if necessary. System variables takes precedence.
+    // environment = ["JDBC_CONNECTION":"jdbc:"]
 }
 ```
 
