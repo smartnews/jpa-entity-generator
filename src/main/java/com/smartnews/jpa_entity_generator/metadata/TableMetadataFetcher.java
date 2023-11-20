@@ -72,6 +72,8 @@ public class TableMetadataFetcher {
                     column.setName(rs.getString("COLUMN_NAME"));
                     column.setTypeCode(rs.getInt("DATA_TYPE"));
                     column.setTypeName(rs.getString("TYPE_NAME"));
+                    column.setColumnSize(rs.getInt("COLUMN_SIZE"));
+                    column.setDecimalDigits(rs.getInt("DECIMAL_DIGITS"));
 
                     // Oracle throws java.sql.SQLException: Invalid column name
                     boolean autoIncrement = false;

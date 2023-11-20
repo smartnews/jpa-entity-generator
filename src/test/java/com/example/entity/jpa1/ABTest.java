@@ -20,11 +20,11 @@ import lombok.ToString;
 public class ABTest implements Serializable, ExpirationPredicate {
 
   @Id
-  @Column(name = "`identifier`", nullable = false)
+  @Column(name = "`identifier`", nullable = false, length = 50)
   private String identifier;
   @Column(name = "`expiration_timestamp`", nullable = false)
   private Integer expirationTimestamp;
   @Experimental(comment = "The expected data format is JSON")
-  @Column(name = "`config`", nullable = true)
+  @Column(name = "`config`", nullable = true, length = 2147483647)
   private String config;
 }
