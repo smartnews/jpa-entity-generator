@@ -21,7 +21,7 @@ public class Blog implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "`id`", nullable = false)
   private Integer id;
-  @Column(name = "`name`", nullable = true)
+  @Column(name = "`name`", nullable = true, length = 30)
   private String name;
   @Column(name = "`active`", nullable = true)
   private boolean active;

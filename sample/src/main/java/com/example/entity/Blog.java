@@ -28,7 +28,7 @@ public class Blog implements Serializable {
   @Column(name = "\"id\"", nullable = false)
   private int id;
   @Nullable
-  @Column(name = "\"name\"", nullable = true)
+  @Column(name = "\"name\"", nullable = true, length = 30)
   private String name;
   @Column(name = "\"active\"", nullable = true)
   private boolean active;

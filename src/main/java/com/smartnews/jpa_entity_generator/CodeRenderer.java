@@ -78,6 +78,9 @@ public class CodeRenderer {
             private String columnName;
             private boolean nullable;
             private String type;
+            private Integer length;
+            private Integer precision;
+            private Integer scale;
             private String comment;
             private String defaultValue;
             private boolean primaryKey;

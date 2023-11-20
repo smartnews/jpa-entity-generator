@@ -16,5 +16,7 @@ public class Column {
     private boolean nullable;
     private boolean primaryKey;
     private boolean autoIncrement;
+    private int columnSize;
+    private int decimalDigits;
     private Optional<String> description = Optional.empty();
 }
