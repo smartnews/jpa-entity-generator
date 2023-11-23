@@ -1,9 +1,7 @@
-package com.example.entity.jpa1;
+package com.example.entity5;
 
 import java.io.Serializable;
 import java.sql.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -13,28 +11,25 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@Entity(name = "com.example.entity.jpa1.BlogArticle")
+@Entity(name = "com.example.entity5.BlogArticle")
 @Table(name = "article")
 public class BlogArticle implements Serializable {
 
   public Integer getId() { return this.id; }
 
   @Id
-  @GeneratedValue
-  @Column(name = "`id`", nullable = false)
-  private int id;
-  @Nullable
-  @Column(name = "`name`", nullable = true)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "\"id\"", nullable = false)
+  private Integer id;
+  @Column(name = "\"name\"", nullable = true)
   private String name;
   @Deprecated
-  @Nullable
-  @Column(name = "`tags`", nullable = true)
+  @Column(name = "\"tags\"", nullable = true)
   private Clob tags;
-  @Nonnull
-  @Column(name = "`created_at`", nullable = false)
+  @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
   @ManyToOne
-  @JoinColumn(name = "`blog_id`", referencedColumnName = "`id`", insertable = false, updatable = false)
+  @JoinColumn(name = "\"blog_id\"", referencedColumnName = "\"id\"", insertable = false, updatable = false)
   private Blog blog;
   @OneToMany(mappedBy = "article")
   private java.util.List<BlogArticleTag> listOfBlogArticleTag;

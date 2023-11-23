@@ -1,14 +1,10 @@
-package com.example.entity;
+package com.example.entity5;
 
 import java.io.Serializable;
 import java.sql.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -17,22 +13,18 @@ import lombok.ToString;
 @Data
 @ToString
 @Builder(toBuilder = true)
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity(name = "com.example.entity.Blog")
+@Entity(name = "com.example.entity5.Blog")
 @Table(name = "blog")
 public class Blog implements Serializable {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "\"id\"", nullable = false)
-  private int id;
-  @Nullable
+  private Integer id;
   @Column(name = "\"name\"", nullable = true)
   private String name;
   @Column(name = "\"active\"", nullable = true)
   private boolean active;
-  @Nonnull
   @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
   @OneToMany(mappedBy = "blog")

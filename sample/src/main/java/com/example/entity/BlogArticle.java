@@ -23,12 +23,6 @@ public class BlogArticle implements Serializable {
   @GeneratedValue
   @Column(name = "\"id\"", nullable = false)
   private int id;
-  /**
-   * database comment for blog_id
-   */
-  @Nullable
-  @Column(name = "\"blog_id\"", nullable = true)
-  private Integer blogId;
   @Nullable
   @Column(name = "\"name\"", nullable = true)
   private String name;
@@ -39,9 +33,9 @@ public class BlogArticle implements Serializable {
   @Nonnull
   @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
-
-  @lombok.Setter(lombok.AccessLevel.NONE)
   @ManyToOne
   @JoinColumn(name = "\"blog_id\"", referencedColumnName = "\"id\"", insertable = false, updatable = false)
   private Blog blog;
+  @OneToMany(mappedBy = "article")
+  private java.util.List<BlogArticleTag> listOfBlogArticleTag;
 }

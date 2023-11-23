@@ -27,4 +27,6 @@ public class Tag implements Serializable {
   @Nonnull
   @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
+  @OneToMany(mappedBy = "tag")
+  private java.util.List<BlogArticleTag> listOfBlogArticleTag;
 }

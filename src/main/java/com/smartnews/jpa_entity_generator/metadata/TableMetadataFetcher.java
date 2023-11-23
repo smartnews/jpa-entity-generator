@@ -4,9 +4,7 @@ import com.smartnews.jpa_entity_generator.config.JDBCSettings;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Fetches metadata for all tables in a given database.
@@ -42,7 +40,7 @@ public class TableMetadataFetcher {
         }
     }
 
-    public Table getTable(JDBCSettings jdbcSettings, String schemaAndTable) throws SQLException {
+    public Table getTable(JDBCSettings jdbcSettings, String schemaAndTable, boolean generateRelationships) throws SQLException {
 
         Table tableInfo = new Table();
 
@@ -64,6 +62,30 @@ public class TableMetadataFetcher {
             try (ResultSet rs = databaseMeta.getPrimaryKeys(null, schema, table)) {
                 while (rs.next()) {
                     primaryKeyNames.add(rs.getString("COLUMN_NAME"));
+                }
+            }
+            if (generateRelationships) {
+                try (final ResultSet importedKeys = databaseMeta.getImportedKeys(null, jdbcSettings.getSchemaPattern(), table)) {
+                    while (importedKeys.next()) {
+                        String name = importedKeys.getString("FK_NAME");
+                        ForeignKey fk = new ForeignKey();
+                        fk.setColumnName(importedKeys.getString("FKCOLUMN_NAME"));
+                        fk.setPkTable(importedKeys.getString("PKTABLE_NAME"));
+                        fk.setPkColumnName(importedKeys.getString("PKCOLUMN_NAME"));
+                        if (tableInfo.getForeignKeyMap().containsKey(name)) {
+                            List<ForeignKey> fkList = new ArrayList<>();
+                            fkList.add(tableInfo.getForeignKeyMap().get(name));
+                            fkList.add(fk);
+                            tableInfo.getForeignCompositeKeyMap().put(name, fkList);
+                            tableInfo.getForeignKeyMap().remove(name);
+                        }
+                        else if (tableInfo.getForeignCompositeKeyMap().containsKey(name)) {
+                            tableInfo.getForeignCompositeKeyMap().get(name).add(fk);
+                        }
+                        else {
+                            tableInfo.getForeignKeyMap().put(name, fk);
+                        }
+                    }
                 }
             }
             try (ResultSet rs = databaseMeta.getColumns(null, schema, table, "%")) {
