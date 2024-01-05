@@ -52,6 +52,24 @@ ${field.comment}
   @Column(name = "<#if jpa1Compatible>`<#else>\"</#if>${field.columnName}<#if jpa1Compatible>`<#else>\"</#if>", nullable = ${field.nullable?c})
   private ${field.type} ${field.name}<#if field.defaultValue??> = ${field.defaultValue}</#if>;
 </#list>
+<#list foreignKeyFields as foreignKey>
+  @ManyToOne
+  @JoinColumn(name = "<#if jpa1Compatible>`<#else>\"</#if>${foreignKey.joinColumn.columnName}<#if jpa1Compatible>`<#else>\"</#if>", referencedColumnName = "<#if jpa1Compatible>`<#else>\"</#if>${foreignKey.joinColumn.referencedColumnName}<#if jpa1Compatible>`<#else>\"</#if>", insertable = ${generateRelationshipsInsertable?c}, updatable = ${generateRelationshipsUpdatable?c})
+  private ${foreignKey.type} ${foreignKey.name};
+</#list>
+<#list foreignCompositeKeyFields as foreignCompositeKey>
+  @ManyToOne
+  @JoinColumns({
+  <#list foreignCompositeKey.joinColumns as joinColumn>
+    @JoinColumn(name = "<#if jpa1Compatible>`<#else>\"</#if>${joinColumn.columnName}<#if jpa1Compatible>`<#else>\"</#if>", referencedColumnName = "<#if jpa1Compatible>`<#else>\"</#if>${joinColumn.referencedColumnName}<#if jpa1Compatible>`<#else>\"</#if>", insertable = ${generateRelationshipsInsertable?c}, updatable = ${generateRelationshipsUpdatable?c}),
+  </#list>
+  })
+  private ${foreignCompositeKey.type} ${foreignCompositeKey.name};
+</#list>
+<#list importedKeyFields as importedKey>
+  @OneToMany(mappedBy = "${importedKey.mappedBy}")
+  private java.util.List<${importedKey.name}> listOf${importedKey.name};
+</#list>
 <#list bottomAdditionalCodeList as code>
 
 ${code}

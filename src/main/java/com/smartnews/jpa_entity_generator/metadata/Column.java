@@ -1,7 +1,6 @@
 package com.smartnews.jpa_entity_generator.metadata;
 
 import lombok.Data;
-
 import java.util.Optional;
 
 /**

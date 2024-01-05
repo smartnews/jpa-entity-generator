@@ -1,13 +1,10 @@
 # ---------------------------------------------------------
 # *** JDBC configuration to fetch metadata ***
 
-# You can embed env variables for this section.
-# e.g. password: ${DB_PASSWORD} # export DB_PASSWORD=pass
-
 jdbcSettings:
-  url: "jdbc:h2:file:./db/blog;MODE=MySQL;TRACE_LEVEL_FILE=2;TRACE_LEVEL_SYSTEM_OUT=2"
+  url: "jdbc:h2:file:./sample/db/blog;MODE=MySQL;TRACE_LEVEL_FILE=2;TRACE_LEVEL_SYSTEM_OUT=2"
   username: "user"
-  password: "pass"
+  password: ${DB_PASSWORD}
   driverClassName: "org.h2.Driver"
 
 # ---------------------------------------------------------
@@ -19,33 +16,25 @@ outputDirectory: "src/main/java"
 
 # The package name used when generating entity classes
 #   - string value: full package name
-packageName: "com.example.entity"
+packageName: "com.example.entity5"
 
 # If you need to generate JPA 1 compatible entity classes as well, set the following attributes
 #   - boolean value: true if you need to generate JPA 1 compatible entities as well
 jpa1SupportRequired: true
 # The package to put JP 1 compatible entity classes.
 #   - string value: full package name separate from the "packageName"
-packageNameForJpa1: "com.example.entity.jpa1"
-
+packageNameForJpa1: "com.example.entity5.jpa1"
 
 # If you'd like to have JSR-305 annotations in entity classes as well, set the following attribute
 #   - boolean value: true if you need to generate Nonnull/Nullable annotation-wired entities as well
-jsr305AnnotationsRequired: true
+jsr305AnnotationsRequired: false
 
 # If you want use primitive type instead of the boxing type(e.g: int <-> Integer), set the following attribute
 # This will only take effect on non null fields
 #   - boolean value: true if you want to use primitive type for non null fields
-usePrimitiveForNonNullField: true
+usePrimitiveForNonNullField: false
 
-generatedValueStrategy: null
-
-#Set to true if you want to generate OneToMany and ManyToOne annotations
 generateRelationships: true
-#Set updatable attribut of @JoinColumn
-generateRelationshipsUpdatable: false
-#Set insertable attribut of @JoinColumn
-generateRelationshipsInsertable: false
 
 # ---------------------------------------------------------
 # *** Table scan mode ***
@@ -67,7 +56,8 @@ tableScanMode: 'All'
 #   - array of TableExclusionRule objects
 #     - tableName (string) / tableNames (array): string value that partially matches table names (case sensitive)
 tableExclusionRules:
-  - tableNames: ["^.*_tmp.*$"]
+  - tableName: [".*_tmp"]
+  - tableNames: [".*_tmp2"]
 
 # ---------------------------------------------------------
 # *** Rules for table/class name conversion ***
@@ -124,10 +114,6 @@ classAnnotationRules:
         attributes:
           - name: "toBuilder"
             value: "true"
-  - className: "Blog"
-    annotations:
-      - className: "lombok.NoArgsConstructor"
-      - className: "lombok.AllArgsConstructor"
 
 # ---------------------------------------------------------
 # *** Rules on how to append class comments ***
@@ -151,7 +137,6 @@ classAdditionalCommentRules:
 #     - typeName (string): the type name to be converted
 fieldTypeRules:
   - {classNames: ["ABTest"], fieldName: "config", typeName: "String"}
-  - {classNames: ["ABTest"], fieldName: "expirationTimestamp", typeName: "Integer"}
 
   # If you don't specify classNames in a rule, all the generated classes will be affected.
   - {                        fieldName: "active", typeName: "boolean"}
@@ -201,6 +186,7 @@ fieldAdditionalCommentRules:
 #     - defaultValue (string): the default value part in source code (specify '"something"' if you have a string value)
 fieldDefaultValueRules:
   # If you don't specify classNames in a rule, all the generated classes will be affected.
+#  - {                        fieldNames: ["name"],   defaultValue: '"Anonymous"'}
   - {classNames: ["ABTest"], fieldNames: ["active"], defaultValue: "0"}
 
 # ---------------------------------------------------------

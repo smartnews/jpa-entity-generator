@@ -11,7 +11,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import lombok.Data;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +62,9 @@ public class CodeRenderer {
         // Can be removed after no javax support and replace requireJSR305 to requireJakartaAnnotation
         private boolean useJakarta = false;
 
+        private boolean generateRelationshipsInsertable = false;
+        private boolean generateRelationshipsUpdatable = false;
+
         private List<String> topAdditionalCodeList = new ArrayList<>();
         private List<String> bottomAdditionalCodeList = new ArrayList<>();
 
@@ -70,6 +72,10 @@ public class CodeRenderer {
         private List<ClassAnnotationRule> classAnnotationRules = new ArrayList<>();
         private List<String> interfaceNames = new ArrayList<>();
         private List<Field> fields = new ArrayList<>();
+        private List<ForeignKeyField> foreignKeyFields = new ArrayList<>();
+        private List<ForeignCompositeKeyField> foreignCompositeKeyFields = new ArrayList<>();
+        private List<ImportedKeyField> importedKeyFields = new ArrayList<>();
+
         private List<Field> primaryKeyFields = new ArrayList<>();
 
         @Data
@@ -85,6 +91,31 @@ public class CodeRenderer {
             private boolean primitive;
             private String generatedValueStrategy;
             private List<Annotation> annotations = new ArrayList<>();
+
+        }
+        @Data
+        public static class ImportedKeyField {
+            private String name;
+            private String mappedBy;
+        }
+        @Data
+        public static class ForeignKeyField {
+            private String name;
+            private String type;
+            private JoinColumn joinColumn;
+        }
+
+        @Data
+        public static class ForeignCompositeKeyField {
+            private String name;
+            private String type;
+            private List<JoinColumn> joinColumns;
+        }
+
+        @Data
+        public static class JoinColumn {
+            private String columnName;
+            private String referencedColumnName;
         }
     }
 }

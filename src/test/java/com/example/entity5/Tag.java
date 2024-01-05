@@ -1,9 +1,7 @@
-package com.example.entity.jpa1;
+package com.example.entity5;
 
 import java.io.Serializable;
 import java.sql.*;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -13,19 +11,17 @@ import lombok.ToString;
  */
 @Data
 @ToString
-@Entity(name = "com.example.entity.jpa1.Tag")
+@Entity(name = "com.example.entity5.Tag")
 @Table(name = "tag")
 public class Tag implements Serializable {
 
   @Id
-  @GeneratedValue
-  @Column(name = "`id`", nullable = false)
-  private int id;
-  @Nullable
-  @Column(name = "`tag`", nullable = true)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "\"id\"", nullable = false)
+  private Integer id;
+  @Column(name = "\"tag\"", nullable = true)
   private String tag;
-  @Nonnull
-  @Column(name = "`created_at`", nullable = false)
+  @Column(name = "\"created_at\"", nullable = false)
   private Timestamp createdAt;
   @OneToMany(mappedBy = "tag")
   private java.util.List<BlogArticleTag> listOfBlogArticleTag;
